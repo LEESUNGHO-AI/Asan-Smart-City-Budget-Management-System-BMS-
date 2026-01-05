@@ -1,0 +1,263 @@
+name: 📊 아산시 예산 데이터 자동 동기화
+
+on:
+  # 매일 오전 9시 (KST) 자동 실행 = UTC 00:00
+  schedule:
+    - cron: '0 0 * * *'
+  
+  # 수동 실행
+  workflow_dispatch:
+    inputs:
+      sync_type:
+        description: '동기화 유형'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full      # 전체 동기화 (Sheets → Notion → Dashboard)
+          - sheets    # Sheets → Notion만
+          - dashboard # Notion → Dashboard만
+
+  # Slack webhook 트리거
+  repository_dispatch:
+    types: [budget-update]
+
+  # 코드 변경 시 (main 브랜치)
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/budget_sync.yml'
+
+env:
+  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+  NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+  GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
+  GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+jobs:
+  # ============================================
+  # Job 1: Google Sheets → Notion 동기화
+  # ============================================
+  sync-sheets-to-notion:
+    runs-on: ubuntu-latest
+    name: 📥 Sheets → Notion
+    if: |
+      github.event_name == 'schedule' || 
+      github.event_name == 'repository_dispatch' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.sync_type != 'dashboard')
+    
+    outputs:
+      updated: ${{ steps.sync.outputs.updated }}
+      created: ${{ steps.sync.outputs.created }}
+      errors: ${{ steps.sync.outputs.errors }}
+    
+    steps:
+      - name: 📥 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 🐍 Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 의존성 설치
+        run: |
+          pip install --upgrade pip
+          pip install requests gspread google-auth
+
+      - name: 🔄 예산 데이터 동기화
+        id: sync
+        run: |
+          python scripts/sync_budget_to_notion.py 2>&1 | tee sync_log.txt
+          # 결과 파싱 (로그에서 추출)
+          updated=$(grep -oP '업데이트: \K\d+' sync_log.txt || echo "0")
+          created=$(grep -oP '신규생성: \K\d+' sync_log.txt || echo "0")
+          errors=$(grep -oP '오류: \K\d+' sync_log.txt || echo "0")
+          echo "updated=$updated" >> $GITHUB_OUTPUT
+          echo "created=$created" >> $GITHUB_OUTPUT
+          echo "errors=$errors" >> $GITHUB_OUTPUT
+
+      - name: 📝 동기화 로그 아티팩트 저장
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-log-${{ github.run_number }}
+          path: sync_log.txt
+          retention-days: 7
+
+  # ============================================
+  # Job 2: Notion → Dashboard 데이터 내보내기
+  # ============================================
+  export-to-dashboard:
+    runs-on: ubuntu-latest
+    name: 📤 Notion → Dashboard
+    needs: [sync-sheets-to-notion]
+    if: |
+      always() && 
+      (needs.sync-sheets-to-notion.result == 'success' || needs.sync-sheets-to-notion.result == 'skipped') &&
+      (github.event_name != 'workflow_dispatch' || github.event.inputs.sync_type != 'sheets')
+    
+    steps:
+      - name: 📥 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 🐍 Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 의존성 설치
+        run: pip install requests
+
+      - name: 📊 대시보드 데이터 내보내기
+        run: python scripts/export_to_dashboard.py
+
+      - name: 📁 데이터 파일 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if [ -d "data" ]; then
+            git add data/
+            if git diff --staged --quiet; then
+              echo "변경사항 없음"
+            else
+              git commit -m "📊 예산 데이터 자동 업데이트 ($(date '+%Y-%m-%d %H:%M'))"
+              git push
+            fi
+          fi
+
+      - name: 🔄 notion-config.js 업데이트
+        run: |
+          if [ -f "data/summary.json" ]; then
+            # summary.json에서 값 추출
+            ALLOCATED=$(jq '.총예산' data/summary.json)
+            EXECUTED=$(jq '.총집행' data/summary.json)
+            REMAINING=$(jq '.총잔액' data/summary.json)
+            RATE=$(jq '.집행률' data/summary.json)
+            DAYS=$(jq '.남은일수' data/summary.json)
+            TODAY=$(date '+%Y-%m-%d')
+            
+            echo "📊 업데이트 값:"
+            echo "   배정예산: $ALLOCATED"
+            echo "   집행금액: $EXECUTED"
+            echo "   집행률: $RATE%"
+            echo "   남은일수: D-$DAYS"
+            
+            # notion-config.js가 있으면 업데이트
+            if [ -f "notion-config.js" ]; then
+              sed -i "s/updateDate: '[^']*'/updateDate: '$TODAY'/" notion-config.js
+              sed -i "s/allocatedBudget: [0-9]*/allocatedBudget: $ALLOCATED/" notion-config.js
+              sed -i "s/executedAmount: [0-9]*/executedAmount: $EXECUTED/" notion-config.js
+              sed -i "s/executionRate: [0-9.]*,/executionRate: $RATE,/" notion-config.js
+              sed -i "s/remainingBudget: [0-9]*/remainingBudget: $REMAINING/" notion-config.js
+              sed -i "s/daysRemaining: [0-9]*/daysRemaining: $DAYS/" notion-config.js
+              
+              git add notion-config.js
+              if ! git diff --staged --quiet; then
+                git commit -m "📈 대시보드 설정 업데이트 ($TODAY)"
+                git push
+              fi
+            fi
+          fi
+
+  # ============================================
+  # Job 3: 결과 알림
+  # ============================================
+  notify:
+    runs-on: ubuntu-latest
+    name: 📨 결과 알림
+    needs: [sync-sheets-to-notion, export-to-dashboard]
+    if: always()
+    
+    steps:
+      - name: 💬 Slack 성공 알림
+        if: needs.sync-sheets-to-notion.result == 'success' || needs.sync-sheets-to-notion.result == 'skipped'
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "✅ 예산 데이터 동기화 완료",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {"type": "mrkdwn", "text": "*업데이트:* ${{ needs.sync-sheets-to-notion.outputs.updated || '0' }}건"},
+                    {"type": "mrkdwn", "text": "*신규생성:* ${{ needs.sync-sheets-to-notion.outputs.created || '0' }}건"},
+                    {"type": "mrkdwn", "text": "*트리거:* ${{ github.event_name }}"},
+                    {"type": "mrkdwn", "text": "*시간:* ${{ github.event.head_commit.timestamp || 'N/A' }}"}
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {"type": "plain_text", "text": "📊 Notion 보기"},
+                      "url": "https://www.notion.so/54bfedc3769e43e8bdbcd59f22008417"
+                    },
+                    {
+                      "type": "button",
+                      "text": {"type": "plain_text", "text": "📈 대시보드 보기"},
+                      "url": "https://leesungho-ai.github.io/Asan-Smart-City-Budget-Management-System-BMS-/"
+                    },
+                    {
+                      "type": "button",
+                      "text": {"type": "plain_text", "text": "🔧 Actions 로그"},
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: 💬 Slack 실패 알림
+        if: needs.sync-sheets-to-notion.result == 'failure' || needs.export-to-dashboard.result == 'failure'
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "❌ 예산 데이터 동기화 실패",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*오류가 발생했습니다.*\n로그를 확인해주세요."
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {"type": "plain_text", "text": "🔧 로그 확인"},
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                      "style": "danger"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

@@ -1,185 +1,165 @@
-// Notion API 연동 설정
-// 이 파일은 GitHub Pages에서 노션 데이터를 가져오기 위한 설정입니다.
+/**
+ * 아산시 스마트시티 예산관리 대시보드 설정
+ * 
+ * 이 파일은 GitHub Actions에 의해 자동으로 업데이트됩니다.
+ * 수동 수정 시 다음 동기화 때 덮어씌워질 수 있습니다.
+ * 
+ * 데이터 흐름:
+ *   Slack #플랜예산 → Google Sheets → Notion DB → GitHub Actions → 이 파일
+ * 
+ * 마지막 자동 업데이트: GitHub Actions에서 관리
+ */
 
 const NOTION_CONFIG = {
-    // 노션 데이터베이스 ID
-    databases: {
-        budgetManagement: '2aa50aa9-577d-8128-b6d4-c5c21d845796',  // 예산관리 시스템
-        wbsManagement: 'd9396e10-b13c-4469-9086-3322af5a2659',      // WBS 관리 시스템
-        riskManagement: '199f2378-aab3-437c-937e-3209b93021bd',     // 리스크 관리 시스템
-        assetManagement: '2aa50aa9-577d-8125-8cf7-cb3988aad68e'     // 자산관리 시스템
-    },
-    
-    // 노션 페이지 ID
-    pages: {
-        projectManagement: '21650aa9-577d-80dc-8278-e0187c54677f',  // 프로젝트 관리 메인
-        dashboard: '2aa50aa9-577d-817d-a233-c79ce0c441fe',          // 통합 대시보드
-        budgetReport: '25d50aa9-577d-81d7-bd29-c4dff6691d65'        // 종합현황 보고서
-    },
-    
+    // ============================================
     // 프로젝트 기본 정보
+    // ============================================
     project: {
         name: '아산시 강소형 스마트시티 조성사업',
+        period: '2023 ~ 2025.12.31',
+        location: '충청남도 아산시 도고면·배방읍 일원',
         totalBudget: 24000000000,  // 240억원
-        nationalFund: 12000000000, // 국비 120억원
-        localFund: 12000000000,    // 지방비 120억원
-        startDate: '2023-01-01',
-        endDate: '2025-12-31',
-        location: '충청남도 아산시 도고면·배방읍 일원'
+        fundingSources: {
+            national: 12000000000,  // 국비 120억
+            provincial: 6000000000, // 도비 60억
+            municipal: 6000000000   // 시비 60억
+        }
     },
-    
-    // 현재 예산 현황 (2025-11-27 기준)
+
+    // ============================================
+    // 실시간 현황 (GitHub Actions 자동 업데이트)
+    // ============================================
     currentStatus: {
-        updateDate: '2025-11-27',
-        allocatedBudget: 17134000000,    // 배정예산 171.34억원
-        contractAmount: 3358000000,       // 계약금액 33.58억원
-        executedAmount: 2530000000,       // 집행금액 25.3억원
-        executionRate: 14.8,              // 집행률 14.8%
-        remainingBudget: 14604000000,     // 잔액 146.04억원
-        daysRemaining: 34                  // 남은 기간
+        updateDate: '2025-01-05',
+        allocatedBudget: 24000000000,    // 배정예산
+        executedAmount: 10282464177,     // 집행금액
+        executionRate: 42.8,             // 집행률 (%)
+        remainingBudget: 13717535823,    // 잔액
+        daysRemaining: 360               // 남은 일수 (D-day)
     },
-    
-    // 재원별 집행 현황
-    fundExecution: {
-        national: {
-            allocated: 8570000000,    // 85.7억원
-            executed: 1270000000,     // 12.7억원
-            rate: 10.6
+
+    // ============================================
+    // Notion 연동 정보
+    // ============================================
+    notion: {
+        projectPage: 'https://www.notion.so/21650aa9577d80dc8278e0187c54677f',
+        budgetDatabase: 'https://www.notion.so/54bfedc3769e43e8bdbcd59f22008417',
+        wbsDatabase: 'https://www.notion.so/2a250aa9577d80ca8bf2f2abfce71a59',
+        assetDatabase: 'https://www.notion.so/2b750aa9577d8170b77ee4cab8d09d2f'
+    },
+
+    // ============================================
+    // 데이터 소스 정보
+    // ============================================
+    dataSources: {
+        googleSheets: {
+            id: '1w9IwMI8B96AfdUDe31SfByOy67oYzvjv',
+            url: 'https://docs.google.com/spreadsheets/d/1w9IwMI8B96AfdUDe31SfByOy67oYzvjv/',
+            slackChannel: '#플랜예산'
         },
-        provincial: {
-            allocated: 2060000000,    // 20.6억원
-            executed: 300000000,      // 3.0억원
-            rate: 10.4
-        },
-        municipal: {
-            allocated: 6500000000,    // 65.0억원
-            executed: 960000000,      // 9.6억원
-            rate: 10.5
+        github: {
+            repo: 'LEESUNGHO-AI/Asan-Smart-City-Budget-Management-System-BMS-',
+            dashboardUrl: 'https://leesungho-ai.github.io/Asan-Smart-City-Budget-Management-System-BMS-/'
         }
     },
-    
-    // 핵심 사업 목록
-    coreProjects: [
-        {
-            id: 'sddc-platform',
-            name: 'SDDC Platform 구축',
-            budget: 2700000000,
-            status: 'bidding',
-            progress: 0,
-            manager: '이성호',
-            priority: 'urgent',
-            deadline: '2025-12-05'
-        },
-        {
-            id: 'digital-oasis-info',
-            name: '디지털OASIS 정보관리',
-            budget: 2300000000,
-            status: 'selection',
-            progress: 0,
-            manager: '임혁',
-            priority: 'urgent',
-            deadline: '2025-12-08'
-        },
-        {
-            id: 'ai-control',
-            name: 'AI통합관제 플랫폼',
-            budget: 1600000000,
-            status: 'contracting',
-            progress: 2.1,
-            manager: '김주용',
-            priority: 'high',
-            deadline: '2025-12-10'
-        },
-        {
-            id: 'oasis-spot',
-            name: '디지털 OASIS SPOT',
-            budget: 3500000000,
-            status: 'construction',
-            progress: 1.2,
-            manager: '임혁',
-            priority: 'high',
-            deadline: '2025-12-15'
-        },
-        {
-            id: 'drt-service',
-            name: 'DRT 서비스 플랫폼',
-            budget: 1000000000,
-            status: 'ordering',
-            progress: 5.0,
-            manager: '함정영',
-            priority: 'medium',
-            deadline: '2025-12-20'
-        },
-        {
-            id: 'network',
-            name: '유무선 네트워크 구축',
-            budget: 1500000000,
-            status: 'completed',
-            progress: 96.2,
-            manager: '이성호',
-            priority: 'low',
-            deadline: '2025-11-30'
-        },
-        {
-            id: 'innovation-center',
-            name: '이노베이션센터 구축',
-            budget: 1300000000,
-            status: 'in-progress',
-            progress: 93.4,
-            manager: '김주용',
-            priority: 'low',
-            deadline: '2025-12-10'
-        }
-    ],
-    
+
+    // ============================================
+    // 단위사업별 현황
+    // ============================================
+    projectStatus: {
+        '유무선네트워크': { progress: 96.2, status: 'complete', budget: 400000000 },
+        '이노베이션센터': { progress: 93.4, status: 'complete', budget: 1300000000 },
+        'SDDC_Platform': { progress: 28.9, status: 'in_progress', budget: 2700000000 },
+        '디지털OASIS_SPOT': { progress: 0.4, status: 'warning', budget: 3500000000 },
+        '스마트공공WiFi': { progress: 0, status: 'pending', budget: 735000000 },
+        'AI통합관제': { progress: 0, status: 'pending', budget: 1600000000 }
+    },
+
+    // ============================================
+    // 비목별 현황
+    // ============================================
+    categoryStatus: {
+        '인건비': { budget: 1901500000, executed: 1784334539, rate: 93.8 },
+        '운영비': { budget: 753400000, executed: 436495832, rate: 57.9 },
+        '여비': { budget: 40100000, executed: 72545332, rate: 180.9 },
+        '연구개발비': { budget: 1000000000, executed: 0, rate: 0 },
+        '유형자산': { budget: 20000000, executed: 16484942, rate: 82.4 },
+        '무형자산': { budget: 9050000000, executed: 4207500000, rate: 46.5 },
+        '건설비': { budget: 9935000000, executed: 2465103532, rate: 24.8 },
+        '사업비배분': { budget: 1300000000, executed: 1300000000, rate: 100.0 }
+    },
+
+    // ============================================
     // 리스크 현황
+    // ============================================
     risks: {
-        urgent: { count: 2, amount: 6800000000 },
-        high: { count: 3, amount: 5100000000 },
-        medium: { count: 3, amount: 2200000000 },
-        personnelOverload: 7
+        critical: [
+            { item: '디지털OASIS SPOT', issue: '집행률 0.4%', action: '긴급 발주 필요' },
+            { item: '국내여비', issue: '예산 초과 180.9%', action: '예산 조정 필요' }
+        ],
+        high: [
+            { item: 'SDDC Platform', issue: '계약 협상 중', action: '12월 내 체결 목표' },
+            { item: '부스제작비', issue: '예산 초과 191.8%', action: '추가 예산 확보' }
+        ],
+        medium: [
+            { item: '스마트공공WiFi', issue: '미집행', action: '발주 준비 중' },
+            { item: '무인매장', issue: '미집행', action: '업체 선정 필요' }
+        ]
     },
-    
-    // 팀 정보
-    team: [
-        { name: '이성호', role: '상무', area: 'PMO총괄, 인프라' },
-        { name: '김주용', role: '책임', area: '사업관리, AI플랫폼' },
-        { name: '임혁', role: '책임', area: '설계, OASIS' },
-        { name: '함정영', role: '선임', area: '조달, DRT' }
-    ]
+
+    // ============================================
+    // 연락처
+    // ============================================
+    contacts: {
+        pmo: {
+            team: 'PMO팀',
+            email: 'smartcity-pmo@cheileng.com',
+            phone: '02-3450-7200'
+        },
+        city: {
+            team: '아산시 스마트도시팀',
+            phone: '041-540-2850'
+        }
+    }
 };
 
-// 노션 URL 생성 함수
-function getNotionUrl(type, id) {
-    const baseUrl = 'https://www.notion.so/';
-    return baseUrl + id.replace(/-/g, '');
-}
+// 유틸리티 함수
+const BudgetUtils = {
+    formatCurrency: (value) => {
+        if (value >= 100000000) {
+            return (value / 100000000).toFixed(1) + '억원';
+        } else if (value >= 10000) {
+            return (value / 10000).toFixed(0) + '만원';
+        }
+        return value.toLocaleString() + '원';
+    },
 
-// 금액 포맷팅 함수
-function formatCurrency(amount, unit = '억원') {
-    if (unit === '억원') {
-        return (amount / 100000000).toFixed(1) + '억원';
+    formatPercent: (value) => {
+        return value.toFixed(1) + '%';
+    },
+
+    getStatusColor: (rate) => {
+        if (rate >= 80) return '#10B981';  // green
+        if (rate >= 50) return '#F59E0B';  // yellow
+        if (rate > 0) return '#EF4444';    // red
+        return '#6B7280';                   // gray
+    },
+
+    getDaysRemainingText: () => {
+        const endDate = new Date('2025-12-31');
+        const today = new Date();
+        const diff = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+        return diff > 0 ? `D-${diff}` : '종료';
     }
-    return amount.toLocaleString() + '원';
+};
+
+// 전역 노출
+if (typeof window !== 'undefined') {
+    window.NOTION_CONFIG = NOTION_CONFIG;
+    window.BudgetUtils = BudgetUtils;
 }
 
-// 진행률 상태 반환
-function getProgressStatus(progress) {
-    if (progress >= 90) return { text: '완료', color: 'green' };
-    if (progress >= 50) return { text: '진행중', color: 'blue' };
-    if (progress >= 10) return { text: '초기', color: 'yellow' };
-    return { text: '시작전', color: 'red' };
-}
-
-// 남은 일수 계산
-function calculateDaysRemaining() {
-    const endDate = new Date(NOTION_CONFIG.project.endDate);
-    const today = new Date();
-    const diffTime = endDate - today;
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-}
-
-// 데이터 내보내기
+// Node.js 모듈 내보내기
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = NOTION_CONFIG;
+    module.exports = { NOTION_CONFIG, BudgetUtils };
 }
