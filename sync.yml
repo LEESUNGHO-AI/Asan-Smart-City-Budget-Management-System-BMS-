@@ -1,0 +1,120 @@
+name: 🔄 예산 데이터 실시간 동기화
+
+on:
+  # 매 시간 자동 실행 (실시간에 가깝게)
+  schedule:
+    - cron: '0 * * * *'  # 매시 정각
+  
+  # 수동 실행
+  workflow_dispatch:
+  
+  # Slack webhook 트리거
+  repository_dispatch:
+    types: [budget-update, slack-trigger]
+  
+  # 코드 변경 시
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+  NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    name: 📊 데이터 동기화 및 배포
+    
+    steps:
+      - name: 📥 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 🐍 Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 의존성 설치
+        run: pip install requests
+
+      - name: 🔄 Notion 데이터 가져오기
+        run: python api/fetch_notion_data.py
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+
+      - name: 📝 데이터 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if [ -f "data/budget.json" ]; then
+            git add data/budget.json
+            if git diff --staged --quiet; then
+              echo "변경사항 없음"
+            else
+              git commit -m "📊 예산 데이터 자동 업데이트 $(date '+%Y-%m-%d %H:%M KST')"
+              git push
+            fi
+          fi
+
+      - name: 🚀 GitHub Pages 배포
+        uses: actions/configure-pages@v4
+        
+      - name: 📦 아티팩트 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: 🌐 배포
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: 💬 Slack 알림 (성공)
+        if: success() && env.SLACK_WEBHOOK_URL != ''
+        run: |
+          curl -X POST $SLACK_WEBHOOK_URL \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {"type": "plain_text", "text": "✅ 예산 대시보드 업데이트 완료", "emoji": true}
+                },
+                {
+                  "type": "section",
+                  "text": {"type": "mrkdwn", "text": "Notion 데이터가 GitHub Pages 대시보드에 동기화되었습니다.\n\n*시간:* '"$(date '+%Y-%m-%d %H:%M KST')"'"}
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {"type": "button", "text": {"type": "plain_text", "text": "📊 대시보드 보기"}, "url": "https://leesungho-ai.github.io/Asan-Smart-City-Budget-Management-System-BMS-/"},
+                    {"type": "button", "text": {"type": "plain_text", "text": "📋 Notion 보기"}, "url": "https://www.notion.so/54bfedc3769e43e8bdbcd59f22008417"}
+                  ]
+                }
+              ]
+            }'
+
+      - name: 💬 Slack 알림 (실패)
+        if: failure() && env.SLACK_WEBHOOK_URL != ''
+        run: |
+          curl -X POST $SLACK_WEBHOOK_URL \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {"type": "plain_text", "text": "❌ 예산 대시보드 동기화 실패", "emoji": true}
+                },
+                {
+                  "type": "section",
+                  "text": {"type": "mrkdwn", "text": "동기화 중 오류가 발생했습니다.\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|로그 확인>"}
+                }
+              ]
+            }'
