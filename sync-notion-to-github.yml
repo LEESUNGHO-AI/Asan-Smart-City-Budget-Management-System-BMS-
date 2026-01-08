@@ -1,0 +1,106 @@
+# 아산시 스마트시티 예산관리 시스템 - Notion ↔ GitHub Pages 자동 동기화
+# 
+# 저장 위치: .github/workflows/sync-notion-to-github.yml
+# 
+# 설정 방법:
+# 1. GitHub Repository Settings → Secrets and variables → Actions
+# 2. 다음 Secrets 추가:
+#    - NOTION_API_KEY: Notion Integration API Key
+#    - NOTION_DATABASE_ID: 2aa50aa9577d8128b6d4c5c21d845796
+#    - NOTION_PROJECT_PAGE_ID: 21650aa9577d80dc8278e0187c54677f
+
+name: Sync Notion to GitHub Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: '강제 업데이트 (캐시 무시)'
+        required: false
+        default: 'false'
+        type: boolean
+  
+  schedule:
+    - cron: '0 0 * * *'  # UTC 0:00 = KST 09:00
+  
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/**'
+
+env:
+  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+  NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+  NOTION_PROJECT_PAGE_ID: ${{ secrets.NOTION_PROJECT_PAGE_ID }}
+  TZ: 'Asia/Seoul'
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests python-dateutil pytz
+      
+      - name: Fetch Notion Data
+        id: fetch-notion
+        run: |
+          python scripts/sync_notion_data.py
+          echo "sync_time=$(date +'%Y-%m-%d %H:%M:%S KST')" >> $GITHUB_OUTPUT
+      
+      - name: Generate Dashboard Data
+        run: |
+          python scripts/generate_dashboard_json.py
+      
+      - name: Check for Changes
+        id: check-changes
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and Push Changes
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Auto-sync: Notion 데이터 업데이트 (${{ steps.fetch-notion.outputs.sync_time }})"
+          git push
+      
+      - name: Deploy to GitHub Pages
+        if: steps.check-changes.outputs.has_changes == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+          commit_message: "Deploy: ${{ steps.fetch-notion.outputs.sync_time }}"
+      
+      - name: Summary
+        run: |
+          echo "## 동기화 결과" >> $GITHUB_STEP_SUMMARY
+          echo "- 실행 시간: ${{ steps.fetch-notion.outputs.sync_time }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 변경사항: ${{ steps.check-changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
