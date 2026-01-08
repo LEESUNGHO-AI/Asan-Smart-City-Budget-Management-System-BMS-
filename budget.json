@@ -24,203 +24,37 @@
       "대기": 2
     },
     "재원별": {
-      "국비": {
-        "총액": 12000000000,
-        "비율": 50,
-        "집행": 4540000000,
-        "집행률": 37.8
-      },
-      "도비": {
-        "총액": 2880000000,
-        "비율": 12,
-        "집행": 1090000000,
-        "집행률": 37.8
-      },
-      "시비": {
-        "총액": 9120000000,
-        "비율": 38,
-        "집행": 3450000000,
-        "집행률": 37.8
-      }
+      "국비": {"총액": 12000000000, "비율": 50, "집행": 4540000000, "집행률": 37.8},
+      "도비": {"총액": 2880000000, "비율": 12, "집행": 1090000000, "집행률": 37.8},
+      "시비": {"총액": 9120000000, "비율": 38, "집행": 3450000000, "집행률": 37.8}
     }
   },
   "units": [
-    {
-      "id": 1,
-      "name": "유무선 네트워크 구축",
-      "budget": 400000000,
-      "executed": 456000000,
-      "remaining": -56000000,
-      "rate": 114,
-      "status": "완료",
-      "status_detail": "계약완료 (초과집행)",
-      "contractor": "사인텔레콤",
-      "contract_date": "2025-11-20",
-      "description": "광케이블 30km, WiFi AP 200개, IoT 게이트웨이 20대"
-    },
-    {
-      "id": 2,
-      "name": "서비스 인프라 플랫폼",
-      "budget": 2700000000,
-      "executed": 0,
-      "remaining": 2700000000,
-      "rate": 0,
-      "progress": 85,
-      "status": "진행중",
-      "status_detail": "협상완료, 계약진행중",
-      "description": "통합 플랫폼 개발, 데이터 수집/전처리, API 게이트웨이"
-    },
-    {
-      "id": 3,
-      "name": "이노베이션 센터 구축",
-      "budget": 1300000000,
-      "executed": 1210000000,
-      "remaining": 90000000,
-      "rate": 93,
-      "status": "완료",
-      "status_detail": "구축완료",
-      "location": "호서대 KTX캠퍼스 온라인교육관",
-      "description": "리빙랩, 통합관제센터, 테스트베드"
-    },
-    {
-      "id": 4,
-      "name": "디지털 OASIS SPOT",
-      "budget": 3500000000,
-      "executed": 15000000,
-      "remaining": 3485000000,
-      "rate": 0.4,
-      "status": "진행중",
-      "status_detail": "부지승인 완료, 착공준비",
-      "location": "도고면 기곡리 174-1 (파라다이스스파도고 유휴부지)",
-      "description": "카라반 30동, 관리동, 스마트폴 15기"
-    },
-    {
-      "id": 5,
-      "name": "SDDC Platform 구축",
-      "budget": 2700000000,
-      "executed": 780000000,
-      "remaining": 1920000000,
-      "rate": 29,
-      "status": "진행중",
-      "status_detail": "기술협상완료, 계약진행중",
-      "contractor": "한국정보기술컨소시엄",
-      "description": "Cloud Management Platform, 가상화 인프라"
-    },
-    {
-      "id": 6,
-      "name": "AI 통합관제 플랫폼",
-      "budget": 1600000000,
-      "executed": 0,
-      "remaining": 1600000000,
-      "rate": 0,
-      "status": "대기",
-      "status_detail": "계약 대기",
-      "description": "AI 영상분석, 실시간 모니터링, CCTV 통합관제"
-    },
-    {
-      "id": 7,
-      "name": "디지털 OASIS 정보관리",
-      "budget": 2300000000,
-      "executed": 4200000000,
-      "remaining": -1900000000,
-      "rate": 168,
-      "status": "주의",
-      "status_detail": "초과집행 주의",
-      "description": "데이터 모델링, 마켓플레이스, API 제공"
-    },
-    {
-      "id": 8,
-      "name": "DRT 플랫폼",
-      "budget": 1000000000,
-      "executed": 0,
-      "remaining": 1000000000,
-      "rate": 0,
-      "status": "대기",
-      "status_detail": "설계 진행중",
-      "description": "AI 배차 알고리즘, 사용자/운전자 App"
-    },
-    {
-      "id": 9,
-      "name": "감리용역",
-      "budget": 160000000,
-      "executed": 0,
-      "remaining": 160000000,
-      "rate": 0,
-      "status": "신규",
-      "status_detail": "신설 - 업체선정 준비",
-      "description": "서비스 인프라 구축용역 감리"
-    }
+    {"id": 1, "name": "유무선 네트워크 구축", "budget": 400000000, "executed": 456000000, "rate": 114, "status": "완료", "status_detail": "계약완료 (초과집행)", "contractor": "사인텔레콤"},
+    {"id": 2, "name": "서비스 인프라 플랫폼", "budget": 2700000000, "executed": 0, "rate": 0, "progress": 85, "status": "진행중", "status_detail": "협상완료, 계약진행중"},
+    {"id": 3, "name": "이노베이션 센터 구축", "budget": 1300000000, "executed": 1210000000, "rate": 93, "status": "완료", "status_detail": "구축완료"},
+    {"id": 4, "name": "디지털 OASIS SPOT", "budget": 3500000000, "executed": 15000000, "rate": 0.4, "status": "진행중", "status_detail": "부지승인 완료, 착공준비"},
+    {"id": 5, "name": "SDDC Platform 구축", "budget": 2700000000, "executed": 780000000, "rate": 29, "status": "진행중", "status_detail": "기술협상완료, 계약진행중"},
+    {"id": 6, "name": "AI 통합관제 플랫폼", "budget": 1600000000, "executed": 0, "rate": 0, "status": "대기", "status_detail": "계약 대기"},
+    {"id": 7, "name": "디지털 OASIS 정보관리", "budget": 2300000000, "executed": 4200000000, "rate": 183, "status": "주의", "status_detail": "초과집행 주의"},
+    {"id": 8, "name": "DRT 플랫폼", "budget": 1000000000, "executed": 0, "rate": 0, "status": "대기", "status_detail": "설계 진행중"},
+    {"id": 9, "name": "감리용역", "budget": 160000000, "executed": 0, "rate": 0, "status": "신규", "status_detail": "신설 - 업체선정 준비"}
   ],
   "risks": {
     "critical": [
-      {
-        "id": 1,
-        "title": "예산 집행률 저조",
-        "description": "2025년 집행률 14.8% → 2026년 집행 집중 필요",
-        "impact": 14600000000,
-        "response": "2026년 상반기 대형 계약 체결 및 집행 가속화",
-        "deadline": "2026-06-30"
-      },
-      {
-        "id": 2,
-        "title": "OASIS SPOT 공사 지연 리스크",
-        "description": "부지 승인 완료, 착공 필요",
-        "impact": 3550000000,
-        "response": "2026년 1분기 공사 착수 확정",
-        "deadline": "2026-03-31"
-      }
+      {"id": 1, "title": "예산 집행률 저조", "description": "2025년 집행률 14.8% → 2026년 집행 집중 필요", "impact": 14600000000, "response": "2026년 상반기 대형 계약 체결", "deadline": "2026-06-30"},
+      {"id": 2, "title": "OASIS SPOT 공사 지연", "description": "부지 승인 완료, 착공 필요", "impact": 3550000000, "response": "2026년 1분기 공사 착수", "deadline": "2026-03-31"}
     ],
     "high": [
-      {
-        "id": 3,
-        "title": "SDDC Platform 계약 지연",
-        "impact": 2700000000,
-        "response": "계약 체결 진행중"
-      },
-      {
-        "id": 4,
-        "title": "서비스 인프라 계약 지연",
-        "impact": 2700000000,
-        "response": "계약 체결 진행중"
-      },
-      {
-        "id": 5,
-        "title": "네트워크 장비 납기 12주",
-        "impact": 800000000,
-        "response": "조기 발주 및 대체 장비 검토"
-      }
+      {"id": 3, "title": "SDDC Platform 계약 지연", "impact": 2700000000, "response": "계약 체결 진행중"},
+      {"id": 4, "title": "서비스 인프라 계약 지연", "impact": 2700000000, "response": "계약 체결 진행중"},
+      {"id": 5, "title": "네트워크 장비 납기 12주", "impact": 800000000, "response": "조기 발주"}
     ],
     "medium": [
-      {
-        "id": 6,
-        "title": "AI통합관제 계약 지연",
-        "impact": 1600000000
-      },
-      {
-        "id": 7,
-        "title": "정보관리 서비스 업체선정 지연",
-        "impact": 2300000000
-      },
-      {
-        "id": 8,
-        "title": "DRT 차량 발주 지연",
-        "impact": 1000000000
-      }
+      {"id": 6, "title": "AI통합관제 계약 지연", "impact": 1600000000},
+      {"id": 7, "title": "정보관리 서비스 업체선정 지연", "impact": 2300000000},
+      {"id": 8, "title": "DRT 차량 발주 지연", "impact": 1000000000}
     ],
-    "summary": {
-      "critical": 2,
-      "high": 3,
-      "medium": 3,
-      "total": 8
-    }
-  },
-  "milestones": [
-    {"date": "2026-01-10", "type": "계약", "title": "SDDC Platform 본계약 체결"},
-    {"date": "2026-01-15", "type": "착수", "title": "서비스 인프라 플랫폼 착수보고"},
-    {"date": "2026-01-20", "type": "점검", "title": "1월 중간점검"},
-    {"date": "2026-01-31", "type": "보고", "title": "1월 월간 추진실적 보고"},
-    {"date": "2026-03-31", "type": "착공", "title": "OASIS SPOT 착공"},
-    {"date": "2026-06-30", "type": "점검", "title": "상반기 예산 집행 점검"},
-    {"date": "2026-12-31", "type": "마감", "title": "사업 종료"}
-  ]
+    "summary": {"critical": 2, "high": 3, "medium": 3, "total": 8}
+  }
 }
