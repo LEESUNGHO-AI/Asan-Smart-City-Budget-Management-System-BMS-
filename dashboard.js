@@ -1,15 +1,16 @@
 /**
  * 아산시 스마트시티 예산관리 통합 대시보드
- * Notion 데이터 기반 실시간 업데이트
+ * 업데이트: 2026-01-08
+ * - 사업기간 연장 반영 (2026-12-31)
+ * - 단위사업별 진행률 표시
  */
 
 // 설정
 const CONFIG = {
     dataUrl: 'data/budget.json',
-    notionDbUrl: 'https://www.notion.so/54bfedc3769e43e8bdbcd59f22008417',
     notionProjectUrl: 'https://www.notion.so/21650aa9577d80dc8278e0187c54677f',
     refreshInterval: 300000, // 5분마다 새로고침
-    projectEndDate: new Date('2025-12-31'),
+    projectEndDate: new Date('2026-12-31'), // 연장된 사업종료일
     totalBudget: 24000000000, // 240억원
 };
 
@@ -27,13 +28,17 @@ const Utils = {
     
     formatPercent(value) {
         if (!value) return '0%';
-        return (value * 100).toFixed(1) + '%';
+        return value.toFixed(1) + '%';
     },
     
     getStatusColor(status) {
         const colors = {
+            '완료': '#10B981',
+            '진행중': '#3B82F6',
+            '대기': '#6B7280',
+            '신규': '#8B5CF6',
+            '주의': '#EF4444',
             '정상': '#10B981',
-            '주의': '#F59E0B',
             '초과': '#EF4444',
             '미집행': '#6B7280',
         };
@@ -42,12 +47,16 @@ const Utils = {
     
     getStatusEmoji(status) {
         const emojis = {
+            '완료': '✅',
+            '진행중': '🔄',
+            '대기': '⏸️',
+            '신규': '🆕',
+            '주의': '🔴',
             '정상': '🟢',
-            '주의': '🟡',
             '초과': '🔴',
             '미집행': '⚪',
         };
-        return emojis[status] || '⚪';
+        return emojis[status] || '📋';
     },
     
     getDaysRemaining() {
@@ -94,13 +103,19 @@ class BudgetDashboard {
         }
     }
     
+    showError(message) {
+        const errorEl = document.getElementById('error-message');
+        if (errorEl) {
+            errorEl.innerHTML = `<div class="error-alert">⚠️ ${message}</div>`;
+        }
+    }
+    
     render() {
         if (!this.data) return;
         
         this.renderHeader();
         this.renderSummaryCards();
-        this.renderBimokChart();
-        this.renderStatusTable();
+        this.renderUnitsTable();
         this.renderRiskItems();
         this.renderFooter();
     }
@@ -112,13 +127,15 @@ class BudgetDashboard {
         const daysRemaining = Utils.getDaysRemaining();
         const updateDate = this.data.update_date || new Date().toISOString().split('T')[0];
         const updateTime = this.data.update_time || '';
+        const extensionApproved = this.data.project_info?.extension_approved;
         
         headerEl.innerHTML = `
             <div class="header-status">
                 <span class="update-badge">📅 최종 업데이트: ${updateDate} ${updateTime}</span>
-                <span class="days-badge ${daysRemaining <= 30 ? 'urgent' : ''}">
+                <span class="days-badge ${daysRemaining <= 90 ? 'urgent' : ''}">
                     ⏰ D-${daysRemaining}
                 </span>
+                ${extensionApproved ? '<span class="extension-badge">✅ 연장승인 (12개월)</span>' : ''}
             </div>
         `;
     }
@@ -137,160 +154,131 @@ class BudgetDashboard {
         // 집행금액 카드
         const execEl = document.getElementById('executed-amount');
         if (execEl) {
+            const execRate = summary.집행률;
             execEl.innerHTML = `
                 <div class="card-value">${Utils.formatCurrency(summary.총집행)}</div>
                 <div class="card-label">집행금액</div>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${summary.집행률}%; background: ${summary.집행률 < 30 ? '#EF4444' : summary.집행률 < 70 ? '#F59E0B' : '#10B981'}"></div>
+                    <div class="progress-fill" style="width: ${execRate}%; background: ${execRate < 30 ? '#EF4444' : execRate < 70 ? '#F59E0B' : '#10B981'}"></div>
                 </div>
-                <div class="card-sub">집행률 ${summary.집행률}%</div>
+                <div class="card-sub">집행률 ${execRate}%</div>
             `;
         }
         
         // 잔액 카드
         this.updateCard('remaining-budget', summary.총잔액, '미집행 잔액', 
-            `${summary.상태별?.미집행 || 0}개 항목 미착수`);
+            `${Utils.getDaysRemaining()}일 내 집행 필요`);
     }
     
-    updateCard(elementId, value, label, subText) {
-        const el = document.getElementById(elementId);
-        if (!el) return;
-        
-        el.innerHTML = `
-            <div class="card-value">${Utils.formatCurrency(value)}</div>
-            <div class="card-label">${label}</div>
-            <div class="card-sub">${subText}</div>
-        `;
-    }
-    
-    renderBimokChart() {
-        const chartEl = document.getElementById('bimok-chart');
-        if (!chartEl || !this.data.summary?.비목별) return;
-        
-        const bimok = this.data.summary.비목별;
-        const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4', '#84CC16'];
-        
-        let html = '<div class="bimok-list">';
-        let index = 0;
-        
-        for (const [name, data] of Object.entries(bimok)) {
-            const rate = data.예산 > 0 ? (data.집행 / data.예산 * 100).toFixed(1) : 0;
-            html += `
-                <div class="bimok-item">
-                    <div class="bimok-header">
-                        <span class="bimok-name" style="border-left: 4px solid ${colors[index % colors.length]}">${name}</span>
-                        <span class="bimok-rate">${rate}%</span>
-                    </div>
-                    <div class="bimok-progress">
-                        <div class="bimok-progress-fill" style="width: ${Math.min(100, rate)}%; background: ${colors[index % colors.length]}"></div>
-                    </div>
-                    <div class="bimok-values">
-                        <span>예산: ${Utils.formatCurrency(data.예산)}</span>
-                        <span>집행: ${Utils.formatCurrency(data.집행)}</span>
-                    </div>
-                </div>
+    updateCard(id, value, label, sub) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = `
+                <div class="card-value">${Utils.formatCurrency(value)}</div>
+                <div class="card-label">${label}</div>
+                <div class="card-sub">${sub}</div>
             `;
-            index++;
         }
-        
-        html += '</div>';
-        chartEl.innerHTML = html;
     }
     
-    renderStatusTable() {
+    renderUnitsTable() {
         const tableEl = document.getElementById('status-table');
-        if (!tableEl || !this.data.items) return;
-        
-        // 집행률 기준 정렬 (미집행 → 주의 → 초과 순)
-        const sortedItems = [...this.data.items].sort((a, b) => {
-            const priority = {'초과': 0, '미집행': 1, '주의': 2, '정상': 3};
-            return (priority[a.상태] || 4) - (priority[b.상태] || 4);
-        });
+        if (!tableEl || !this.data.units) return;
         
         let html = `
             <table class="data-table">
                 <thead>
                     <tr>
+                        <th>#</th>
+                        <th>사업명</th>
+                        <th>예산</th>
+                        <th>집행</th>
+                        <th>집행률</th>
                         <th>상태</th>
-                        <th>항목명</th>
-                        <th>비목</th>
-                        <th class="number">총예산</th>
-                        <th class="number">집행액</th>
-                        <th class="number">잔액</th>
-                        <th class="number">집행률</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
         
-        for (const item of sortedItems.slice(0, 20)) {
-            const rate = item.집행률 ? (item.집행률 * 100).toFixed(1) : 0;
+        this.data.units.forEach(unit => {
+            const statusColor = Utils.getStatusColor(unit.status);
+            const statusEmoji = Utils.getStatusEmoji(unit.status);
+            const rateClass = unit.rate > 100 ? 'rate-over' : unit.rate < 10 ? 'rate-low' : '';
+            
             html += `
-                <tr class="status-${item.상태 || '미집행'}">
-                    <td><span class="status-badge">${Utils.getStatusEmoji(item.상태)} ${item.상태 || '미집행'}</span></td>
-                    <td>${item.항목명}</td>
-                    <td>${item.비목 || '-'}</td>
-                    <td class="number">${Utils.formatCurrency(item.총예산)}</td>
-                    <td class="number">${Utils.formatCurrency(item.사용금액_합계)}</td>
-                    <td class="number ${item.잔액 < 0 ? 'negative' : ''}">${Utils.formatCurrency(item.잔액)}</td>
-                    <td class="number">
-                        <div class="mini-progress">
-                            <div class="mini-progress-fill" style="width: ${Math.min(100, rate)}%"></div>
-                        </div>
-                        ${rate}%
+                <tr>
+                    <td>${unit.id}</td>
+                    <td>
+                        <strong>${unit.name}</strong>
+                        <div class="unit-detail">${unit.status_detail}</div>
+                    </td>
+                    <td>${Utils.formatCurrency(unit.budget)}</td>
+                    <td>${Utils.formatCurrency(unit.executed)}</td>
+                    <td class="${rateClass}">${unit.rate}%</td>
+                    <td>
+                        <span class="status-badge" style="background: ${statusColor}">
+                            ${statusEmoji} ${unit.status}
+                        </span>
                     </td>
                 </tr>
             `;
-        }
+        });
         
         html += '</tbody></table>';
-        
-        if (sortedItems.length > 20) {
-            html += `<div class="table-more">총 ${sortedItems.length}개 항목 중 20개 표시</div>`;
-        }
-        
         tableEl.innerHTML = html;
     }
     
     renderRiskItems() {
         const riskEl = document.getElementById('risk-items');
-        if (!riskEl || !this.data.items) return;
+        if (!riskEl || !this.data.risks) return;
         
-        // 리스크 항목 (초과 또는 미집행 중 예산이 큰 항목)
-        const riskItems = this.data.items
-            .filter(item => item.상태 === '초과' || (item.상태 === '미집행' && item.총예산 >= 100000000))
-            .sort((a, b) => b.총예산 - a.총예산)
-            .slice(0, 5);
+        const risks = this.data.risks;
+        let html = '';
         
-        if (riskItems.length === 0) {
-            riskEl.innerHTML = '<p class="no-risk">✅ 현재 긴급 대응이 필요한 항목이 없습니다.</p>';
-            return;
-        }
-        
-        let html = '<div class="risk-list">';
-        
-        for (const item of riskItems) {
-            const isOverBudget = item.잔액 < 0;
-            html += `
-                <div class="risk-item ${isOverBudget ? 'over-budget' : 'not-executed'}">
-                    <div class="risk-icon">${isOverBudget ? '🔴' : '⚪'}</div>
-                    <div class="risk-content">
-                        <div class="risk-title">${item.항목명}</div>
-                        <div class="risk-detail">
-                            ${isOverBudget 
-                                ? `예산 초과: ${Utils.formatCurrency(Math.abs(item.잔액))}` 
-                                : `미집행 예산: ${Utils.formatCurrency(item.총예산)}`
-                            }
+        // 긴급 리스크
+        if (risks.critical && risks.critical.length > 0) {
+            html += '<div class="risk-section"><h3>🔴 긴급 리스크</h3>';
+            risks.critical.forEach(risk => {
+                html += `
+                    <div class="risk-item critical">
+                        <div class="risk-title">${risk.title}</div>
+                        <div class="risk-detail">${risk.description || ''}</div>
+                        <div class="risk-meta">
+                            <span>영향: ${Utils.formatCurrency(risk.impact)}</span>
+                            ${risk.deadline ? `<span>마감: ${risk.deadline}</span>` : ''}
                         </div>
+                        ${risk.response ? `<div class="risk-response">대응: ${risk.response}</div>` : ''}
                     </div>
-                    <div class="risk-action">
-                        ${isOverBudget ? '예산 조정 필요' : '긴급 집행 필요'}
-                    </div>
-                </div>
-            `;
+                `;
+            });
+            html += '</div>';
         }
         
-        html += '</div>';
+        // 높음 리스크
+        if (risks.high && risks.high.length > 0) {
+            html += '<div class="risk-section"><h3>🟠 높음 리스크</h3>';
+            risks.high.forEach(risk => {
+                html += `
+                    <div class="risk-item high">
+                        <div class="risk-title">${risk.title}</div>
+                        <div class="risk-meta">영향: ${Utils.formatCurrency(risk.impact)}</div>
+                        ${risk.response ? `<div class="risk-response">대응: ${risk.response}</div>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+        
+        // 요약
+        html += `
+            <div class="risk-summary">
+                <span>🔴 긴급: ${risks.summary?.critical || 0}건</span>
+                <span>🟠 높음: ${risks.summary?.high || 0}건</span>
+                <span>🟡 주의: ${risks.summary?.medium || 0}건</span>
+                <span>총 ${risks.summary?.total || 0}건 관리중</span>
+            </div>
+        `;
+        
         riskEl.innerHTML = html;
     }
     
@@ -298,23 +286,28 @@ class BudgetDashboard {
         const footerEl = document.getElementById('footer-info');
         if (!footerEl) return;
         
+        const projectInfo = this.data.project_info || {};
+        
         footerEl.innerHTML = `
-            <div class="footer-links">
-                <a href="${CONFIG.notionDbUrl}" target="_blank">📋 Notion 예산 DB</a>
-                <a href="${CONFIG.notionProjectUrl}" target="_blank">📊 프로젝트 관리</a>
-            </div>
-            <div class="footer-meta">
-                데이터 소스: Notion API | 자동 동기화: 매시간
+            <div class="footer-grid">
+                <div class="footer-item">
+                    <strong>사업명</strong>
+                    <span>${projectInfo.name || '아산시 강소형 스마트시티 조성사업'}</span>
+                </div>
+                <div class="footer-item">
+                    <strong>사업기간</strong>
+                    <span>2023.08 ~ 2026.12 (연장승인)</span>
+                </div>
+                <div class="footer-item">
+                    <strong>총 사업비</strong>
+                    <span>240억원 (국비 120억 + 지방비 120억)</span>
+                </div>
+                <div class="footer-item">
+                    <strong>연장승인</strong>
+                    <span>${projectInfo.extension_approved ? '✅ 2025.12.24 국토부 승인' : '❌ 미승인'}</span>
+                </div>
             </div>
         `;
-    }
-    
-    showError(message) {
-        const errorEl = document.getElementById('error-message');
-        if (errorEl) {
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-        }
     }
     
     setupAutoRefresh() {
@@ -324,7 +317,7 @@ class BudgetDashboard {
     }
 }
 
-// 초기화
+// 페이지 로드 시 대시보드 초기화
 document.addEventListener('DOMContentLoaded', () => {
     new BudgetDashboard();
 });
