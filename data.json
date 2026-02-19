@@ -1,0 +1,30 @@
+{
+  "updatedAt": "2026-02-19",
+  "refDate": "2026-02-06",
+  "summary": {
+    "totalBudget": 24000000000,
+    "totalExec":    9800000000,
+    "gov":          4900000000,
+    "city":         3724000000,
+    "prov":         1176000000
+  },
+  "projects": [
+    { "name": "① 유무선 네트워크 구축",      "budget": 400000000,   "exec": 456000000,   "rate": 114.0, "progress": 95, "status": "✅ 완료",    "contractor": "사인텔레콤" },
+    { "name": "② 서비스 인프라 플랫폼",      "budget": 2700000000,  "exec": 0,           "rate": 0,     "progress": 85, "status": "🔄 진행중", "contractor": "우선협상대상자 선정완료" },
+    { "name": "③ 이노베이션 센터 구축·운영", "budget": 1346000000,  "exec": 1210000000,  "rate": 89.9,  "progress": 95, "status": "✅ 완료",    "contractor": "호서대학교 KTX캠퍼스" },
+    { "name": "④ 디지털 OASIS SPOT 구축",   "budget": 3554000000,  "exec": 15000000,    "rate": 0.4,   "progress": 2,  "status": "⏸️ 대기",   "contractor": "미정" },
+    { "name": "⑤ SDDC Platform 구축",       "budget": 2700000000,  "exec": 780000000,   "rate": 28.9,  "progress": 35, "status": "🔄 진행중", "contractor": "한국정보기술컨소시엄" },
+    { "name": "⑥ AI 통합관제 플랫폼",       "budget": 1600000000,  "exec": 0,           "rate": 0,     "progress": 0,  "status": "⏸️ 대기",   "contractor": "미정" },
+    { "name": "⑦ OASIS 정보관리 서비스",    "budget": 2300000000,  "exec": 0,           "rate": 0,     "progress": 5,  "status": "🔄 진행중", "contractor": "선정예정" },
+    { "name": "⑧ DRT 모빌리티 플랫폼",      "budget": 1000000000,  "exec": 0,           "rate": 0,     "progress": 0,  "status": "⏸️ 대기",   "contractor": "미정" },
+    { "name": "⑨ 감리용역 (신설)",           "budget": 160000000,   "exec": 0,           "rate": 0,     "progress": 0,  "status": "🆕 신설",   "contractor": "미정" }
+  ],
+  "risks": [
+    { "level": "red",    "text": "예산 집행률 40.8% — 잔여 142억원 10개월 내 집행 필요 (월평균 14.2억)",  "tag": "예산집행" },
+    { "level": "red",    "text": "OASIS SPOT 착공 지연 — 35.54억원 (집행률 0.4%), 부지승인 대기",        "tag": "④ OASIS SPOT" },
+    { "level": "orange", "text": "서비스 인프라 선급금 미지급 — 27억 계약 후 집행 미착수",               "tag": "② 서비스인프라" },
+    { "level": "orange", "text": "SDDC 구축 일정 지연 위험 — 28.9% 집행, 2026.6 완료 목표",             "tag": "⑤ SDDC" },
+    { "level": "yellow", "text": "DRT 차량발주 설계 지연 — 10억 미집행",                                 "tag": "⑧ DRT" },
+    { "level": "yellow", "text": "감리용역 업체선정 지연 — 1.6억 미집행",                                "tag": "⑨ 감리" }
+  ]
+}
