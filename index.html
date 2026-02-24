@@ -43,7 +43,6 @@
   }
   .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-  /* 헤더 */
   header { border-bottom: 1px solid var(--border); padding: 20px 0; background: linear-gradient(180deg, rgba(37,99,235,.08) 0%, transparent 100%); }
   .header-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
   .header-label { font-size: 11px; letter-spacing: .15em; color: var(--accent2); text-transform: uppercase; font-family: var(--mono); }
@@ -57,7 +56,6 @@
   .badge-yellow { border-color: var(--yellow);  color: var(--yellow);  background: rgba(245,158,11,.1); }
   .update-time  { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 
-  /* 요약 카드 */
   .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 28px 0 24px; }
   @media (max-width: 900px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
   .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; position: relative; overflow: hidden; transition: border-color .2s; }
@@ -72,7 +70,6 @@
   .stat-sub   { font-size: 12px; color: var(--muted); }
   .stat-icon  { position: absolute; top: 18px; right: 18px; font-size: 22px; opacity: .15; }
 
-  /* 진행바 */
   .progress-wrap { margin-bottom: 24px; }
   .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
   .progress-track { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
@@ -82,7 +79,6 @@
   .progress-fill.over   { background: linear-gradient(90deg, var(--orange), var(--red)); }
   .progress-fill.red    { background: var(--red); }
 
-  /* 탭 */
   .tab-nav { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
   .tab-btn {
     padding: 10px 20px; font-size: 13px; font-weight: 500; color: var(--muted);
@@ -95,7 +91,6 @@
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
-  /* 메인 그리드 */
   .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px; }
   @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
 
@@ -105,7 +100,6 @@
   .card-body   { padding: 20px; }
   .chart-wrap  { position: relative; height: 280px; }
 
-  /* 테이블 */
   .data-table  { width: 100%; border-collapse: collapse; }
   .data-table th { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: .08em; text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
   .data-table td { padding: 11px 12px; border-bottom: 1px solid rgba(30,45,71,.5); font-size: 13px; vertical-align: middle; }
@@ -136,20 +130,20 @@
   .status-over   { background: rgba(249,115,22,.15); color: var(--orange); }
   .status-none   { background: rgba(239,68,68,.15);  color: var(--red); }
 
-  /* 리스크 */
   .risk-list { display: flex; flex-direction: column; gap: 10px; }
   .risk-item { display: flex; gap: 12px; padding: 12px; border-radius: 7px; border-left: 3px solid; background: rgba(255,255,255,.02); }
   .risk-item.red    { border-color: var(--red); }
   .risk-item.orange { border-color: var(--orange); }
   .risk-item.yellow { border-color: var(--yellow); }
+  .risk-item.green  { border-color: var(--green); }
   .risk-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
   .risk-item.red    .risk-dot { background: var(--red); }
   .risk-item.orange .risk-dot { background: var(--orange); }
   .risk-item.yellow .risk-dot { background: var(--yellow); }
+  .risk-item.green  .risk-dot { background: var(--green); }
   .risk-text { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
   .risk-tag  { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-  /* D-Day */
   .dday-card { text-align: center; padding: 16px; background: rgba(37,99,235,.06); border-radius: 8px; border: 1px solid rgba(37,99,235,.2); margin-bottom: 16px; }
   .dday-value { font-family: var(--mono); font-size: 36px; font-weight: 700; color: var(--accent2); }
   .dday-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
@@ -161,30 +155,17 @@
 
   .section-label { font-size: 11px; letter-spacing: .12em; color: var(--accent2); text-transform: uppercase; font-family: var(--mono); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
-  /* 비목 요약 바 */
-  .bimok-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  @media (max-width: 700px) { .bimok-summary { grid-template-columns: 1fr; } }
-  .bimok-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
-  .bimok-name  { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-  .bimok-exec  { font-family: var(--mono); font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-  .bimok-bar   { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
-  .bimok-fill  { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
-
-  /* 푸터 */
   footer { border-top: 1px solid var(--border); padding: 20px 0; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
   .footer-left { font-size: 11px; color: var(--muted); line-height: 1.8; }
   .footer-right { display: flex; gap: 8px; align-items: center; }
   .tier-badge { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); }
   .tier-badge.active { border-color: var(--green); color: var(--green); background: rgba(16,185,129,.08); }
 
-  /* 로딩 */
   .loading-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; gap: 16px; transition: opacity .4s; }
   .loading-overlay.hidden { opacity: 0; pointer-events: none; }
   .spinner { width: 40px; height: 40px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-text { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-
-  .full-width { grid-column: 1 / -1; }
 </style>
 </head>
 <body>
@@ -203,7 +184,7 @@
       </div>
       <div class="header-meta">
         <span class="badge badge-blue">총 사업비 240억원</span>
-        <span class="badge badge-green">2023.12 ~ 2026.12</span>
+        <span class="badge badge-green">2023.12 ~ 2025.12</span>
         <span class="update-time" id="updateTime">로딩 중...</span>
       </div>
     </div>
@@ -212,7 +193,6 @@
 
 <div class="container" id="mainContent" style="opacity:0; transition: opacity .4s;">
 
-  <!-- 요약 카드 -->
   <div class="summary-grid">
     <div class="stat-card blue">
       <div class="stat-icon">💰</div>
@@ -236,11 +216,10 @@
       <div class="stat-icon">📅</div>
       <div class="stat-label">사업 종료까지</div>
       <div class="stat-value" id="dDayCard">—</div>
-      <div class="stat-sub">2026년 12월 31일 마감</div>
+      <div class="stat-sub">2025년 12월 31일 마감</div>
     </div>
   </div>
 
-  <!-- 전체 집행률 -->
   <div class="progress-wrap">
     <div class="progress-label">
       <span>전체 예산 집행률</span>
@@ -251,22 +230,16 @@
     </div>
   </div>
 
-  <!-- 탭 네비게이션 -->
   <div class="tab-nav">
     <button class="tab-btn active" onclick="switchTab('bimok')">📊 비목별 예산</button>
-    <button class="tab-btn" onclick="switchTab('project')">🏗️ 단위사업별 예산</button>
+    <button class="tab-btn" onclick="switchTab('items')">📋 세부 항목</button>
     <button class="tab-btn" onclick="switchTab('risk')">⚠️ 리스크 현황</button>
   </div>
 
-  <!-- ════════════════════════════════════════
-       TAB 1: 비목별 예산
-  ════════════════════════════════════════ -->
+  <!-- TAB 1: 비목별 -->
   <div class="tab-panel active" id="tab-bimok">
     <div class="main-grid">
-      <!-- 왼쪽 -->
-      <div style="display:flex; flex-direction:column; gap:20px;">
-
-        <!-- 비목별 차트 -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
         <div class="card">
           <div class="card-header">
             <span class="card-title">📊 비목별 집행현황</span>
@@ -276,180 +249,133 @@
             <div class="chart-wrap"><canvas id="bimokChart"></canvas></div>
           </div>
         </div>
-
-        <!-- 비목별 테이블 -->
         <div class="card">
           <div class="card-header">
             <span class="card-title">💳 비목별 예산 상세</span>
             <span class="badge badge-blue" id="bimokCount">—</span>
           </div>
-          <div class="card-body" style="padding:0; overflow-x:auto;">
-            <table class="data-table" id="bimokTable">
+          <div class="card-body" style="padding:0;overflow-x:auto;">
+            <table class="data-table">
               <thead>
                 <tr>
-                  <th>비목명</th>
-                  <th>예산(억원)</th>
-                  <th>집행(억원)</th>
-                  <th>잔액(억원)</th>
-                  <th>집행률</th>
-                  <th>상태</th>
-                  <th>비고</th>
+                  <th>비목명</th><th>예산(억원)</th><th>집행(억원)</th>
+                  <th>잔액(억원)</th><th>집행률</th><th>항목수</th>
                 </tr>
               </thead>
               <tbody id="bimokTableBody">
-                <tr><td colspan="7" style="text-align:center; color:var(--muted); padding:24px;">로딩 중...</td></tr>
+                <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">로딩 중...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- 오른쪽 -->
-      <div style="display:flex; flex-direction:column; gap:20px;">
-
-        <!-- 상태별 요약 -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
         <div class="card">
-          <div class="card-header"><span class="card-title">📋 비목 상태 요약</span></div>
+          <div class="card-header"><span class="card-title">📋 집행 상태 요약</span></div>
           <div class="card-body">
-            <div class="risk-list" id="bimokStatusList"></div>
+            <div class="risk-list" id="statusSummaryList"></div>
           </div>
         </div>
-
-        <!-- 주요 이슈 -->
         <div class="card">
-          <div class="card-header"><span class="card-title">⚠️ 비목 집행 이슈</span></div>
+          <div class="card-header"><span class="card-title">⚠️ 집행 이슈</span></div>
           <div class="card-body">
             <div class="risk-list" id="bimokIssueList"></div>
           </div>
         </div>
-
-        <!-- 재원 구성 -->
         <div class="card">
           <div class="card-header"><span class="card-title">🏛️ 재원 구성</span></div>
           <div class="card-body">
             <div class="source-list">
               <div>
-                <div class="source-label"><span class="source-name">국비 (50%) · 120억원</span><span class="source-val mono" id="govRate2">—%</span></div>
-                <div class="progress-track"><div class="progress-fill" id="govFill2" style="width:0%"></div></div>
+                <div class="source-label"><span class="source-name">국비 (50%) · 120억원</span><span class="source-val mono" id="govRate">—%</span></div>
+                <div class="progress-track"><div class="progress-fill" id="govFill" style="width:0%"></div></div>
               </div>
               <div>
-                <div class="source-label"><span class="source-name">시비 (38%) · 91.2억원</span><span class="source-val mono" id="cityRate2">—%</span></div>
-                <div class="progress-track"><div class="progress-fill green" id="cityFill2" style="width:0%"></div></div>
+                <div class="source-label"><span class="source-name">시비 (38%) · 91.2억원</span><span class="source-val mono" id="cityRate">—%</span></div>
+                <div class="progress-track"><div class="progress-fill green" id="cityFill" style="width:0%"></div></div>
               </div>
               <div>
-                <div class="source-label"><span class="source-name">도비 (12%) · 28.8억원</span><span class="source-val mono" id="provRate2">—%</span></div>
-                <div class="progress-track"><div class="progress-fill yellow" id="provFill2" style="width:0%"></div></div>
+                <div class="source-label"><span class="source-name">도비 (12%) · 28.8억원</span><span class="source-val mono" id="provRate">—%</span></div>
+                <div class="progress-track"><div class="progress-fill yellow" id="provFill" style="width:0%"></div></div>
               </div>
             </div>
-            <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
               <div class="section-label">간접보조사업자 교부 현황</div>
-              <div style="display:flex; flex-direction:column; gap:6px; font-size:12px;">
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:var(--muted)">호서대학교</span>
-                  <span style="color:var(--green)">9억 ✅ 교부완료</span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:var(--muted)">충남연구원</span>
-                  <span style="color:var(--green)">2억 ✅ 교부완료</span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:var(--muted)">KAIST</span>
-                  <span style="color:var(--green)">2억 ✅ 교부완료</span>
-                </div>
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+                <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">호서대학교</span><span style="color:var(--green)">9억 ✅ 교부완료</span></div>
+                <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">충남연구원</span><span style="color:var(--green)">2억 ✅ 교부완료</span></div>
+                <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">KAIST</span><span style="color:var(--green)">2억 ✅ 교부완료</span></div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════
-       TAB 2: 단위사업별
-  ════════════════════════════════════════ -->
-  <div class="tab-panel" id="tab-project">
-    <div class="main-grid">
-      <div style="display:flex; flex-direction:column; gap:20px;">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">📊 단위사업별 집행률</span>
-            <span class="badge badge-blue" id="projRefDate">— 기준</span>
-          </div>
-          <div class="card-body">
-            <div class="chart-wrap"><canvas id="projChart"></canvas></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">🏗️ 단위사업별 예산 현황</span>
-            <span class="badge badge-blue" id="projectCount">—</span>
-          </div>
-          <div class="card-body" style="padding:0; overflow-x:auto;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>사업명</th>
-                  <th>예산</th>
-                  <th>집행</th>
-                  <th>잔액</th>
-                  <th>집행률</th>
-                  <th>진도율</th>
-                  <th>상태</th>
-                </tr>
-              </thead>
-              <tbody id="projectTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex; flex-direction:column; gap:20px;">
-        <div class="card">
-          <div class="card-header"><span class="card-title">📅 사업 일정</span></div>
-          <div class="card-body">
-            <div class="dday-card">
-              <div class="dday-sub">D-DAY</div>
-              <div class="dday-value" id="dDayMain">—</div>
-              <div class="dday-sub">2026.12.31 사업 종료</div>
-            </div>
-            <div class="source-list">
-              <div><div class="source-label"><span class="source-name">잔여 개월</span><span class="source-val mono" id="remainMonths">—</span></div></div>
-              <div><div class="source-label"><span class="source-name">월평균 집행 필요</span><span class="source-val mono" id="monthlyNeeded">—</span></div></div>
-              <div><div class="source-label"><span class="source-name">기준일자</span><span class="source-val mono" id="refDateDisp">—</span></div></div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><span class="card-title">🏛️ 추진 체계</span></div>
-          <div class="card-body">
-            <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
-              <div style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">시행기관</span><span>아산시</span></div>
-              <div style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">직접보조사업자</span><span>제일엔지니어링</span></div>
-              <div style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">간접보조사업자</span><span>호서대 · 충남연구원 · KAIST</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ════════════════════════════════════════
-       TAB 3: 리스크
-  ════════════════════════════════════════ -->
-  <div class="tab-panel" id="tab-risk">
+  <!-- TAB 2: 세부 항목 -->
+  <div class="tab-panel" id="tab-items">
     <div class="card" style="margin-bottom:20px;">
       <div class="card-header">
-        <span class="card-title">⚠️ 주요 리스크 현황</span>
-        <span class="badge badge-red" id="riskCount">—</span>
+        <span class="card-title">📋 세부 항목별 예산 현황</span>
+        <span class="badge badge-blue" id="itemCount">—</span>
       </div>
-      <div class="card-body">
-        <div class="risk-list" id="riskList"></div>
+      <div class="card-body" style="padding:0;overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>항목명</th><th>비목</th><th>세목</th>
+              <th>총예산(원)</th><th>집행(원)</th><th>잔액(원)</th>
+              <th>집행률</th><th>상태</th>
+            </tr>
+          </thead>
+          <tbody id="itemTableBody">
+            <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px;">로딩 중...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <!-- 푸터 -->
+  <!-- TAB 3: 리스크 -->
+  <div class="tab-panel" id="tab-risk">
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:20px;">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⚠️ 주요 리스크 현황</span>
+          <span class="badge badge-red" id="riskCount">—</span>
+        </div>
+        <div class="card-body">
+          <div class="risk-list" id="riskList"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">📅 사업 일정</span></div>
+        <div class="card-body">
+          <div class="dday-card">
+            <div class="dday-sub">D-DAY</div>
+            <div class="dday-value" id="dDayMain">—</div>
+            <div class="dday-sub">2025.12.31 사업 종료</div>
+          </div>
+          <div class="source-list">
+            <div><div class="source-label"><span class="source-name">잔여 개월</span><span class="source-val mono" id="remainMonths">—</span></div></div>
+            <div><div class="source-label"><span class="source-name">월평균 집행 필요</span><span class="source-val mono" id="monthlyNeeded">—</span></div></div>
+            <div><div class="source-label"><span class="source-name">기준일자</span><span class="source-val mono" id="refDateDisp">—</span></div></div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+            <div class="section-label">추진 체계</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">시행기관</span><span>아산시</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">직접보조사업자</span><span>제일엔지니어링</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">간접보조사업자</span><span>호서대 · 충남연구원 · KAIST</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="footer-left">
       <div>아산시 강소형 스마트시티 조성사업 예산관리 대시보드 · 제일엔지니어링 PMO팀</div>
@@ -464,31 +390,30 @@
 </div>
 
 <script>
-// ════════════════════════════════════════
+// ════════════════════════════════════
 // 탭 전환
-// ════════════════════════════════════════
+// ════════════════════════════════════
 function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
   document.querySelector('[onclick="switchTab(\'' + name + '\')"]').classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
 }
 
-// ════════════════════════════════════════
+// ════════════════════════════════════
 // 유틸
-// ════════════════════════════════════════
+// ════════════════════════════════════
 var charts = {};
-function eok(won) { return (won / 100000000).toFixed(1); }
-function eokB(b)  { return b.toFixed(1); } // 이미 억 단위
 
-function statusClass(s) {
-  if (!s) return 'status-wait';
-  if (s.includes('정상') || s.includes('완료'))  return 'status-done';
-  if (s.includes('진행'))                         return 'status-active';
-  if (s.includes('초과'))                         return 'status-over';
-  if (s.includes('주의'))                         return 'status-warn';
-  if (s.includes('미집행') || s.includes('신설')) return 'status-none';
-  return 'status-wait';
+function wonToEok(won) {
+  return (won / 100000000).toFixed(1);
+}
+
+function fmtWon(won) {
+  if (!won) return '0';
+  if (Math.abs(won) >= 100000000) return wonToEok(won) + '억';
+  if (Math.abs(won) >= 10000)     return Math.round(won / 10000) + '만';
+  return won.toLocaleString();
 }
 
 function rateClass(rate) {
@@ -498,6 +423,7 @@ function rateClass(rate) {
   if (rate > 0)   return 'rate-low';
   return 'rate-zero';
 }
+
 function barClass(rate) {
   if (rate > 100) return 'over';
   if (rate >= 80) return 'done';
@@ -506,113 +432,144 @@ function barClass(rate) {
   return 'empty';
 }
 
-// ════════════════════════════════════════
-// 데이터 로드
-// ════════════════════════════════════════
+function statusCss(s) {
+  if (!s) return 'status-wait';
+  if (s === '정상')  return 'status-done';
+  if (s === '주의')  return 'status-new';
+  if (s === '초과')  return 'status-over';
+  if (s === '미집행') return 'status-none';
+  return 'status-wait';
+}
+
+// ════════════════════════════════════
+// 데이터 로드 — data.json (루트)
+// ════════════════════════════════════
 async function loadData() {
   try {
     var r = await fetch('data.json?t=' + Date.now());
-    if (!r.ok) throw new Error('not found');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     return await r.json();
-  } catch(e) { return null; }
+  } catch(e) {
+    console.error('data.json 로드 실패:', e);
+    return null;
+  }
 }
 
-// ════════════════════════════════════════
-// 렌더링
-// ════════════════════════════════════════
+// ════════════════════════════════════
+// 메인 렌더링
+// data.json 구조:
+//   updated_at, summary.총집행액, summary.총예산, summary.총잔액,
+//   summary.전체집행률, summary.항목수, summary.상태별,
+//   bimok_summary[], items[]
+// ════════════════════════════════════
 function renderAll(data) {
-  var s = data.summary;
-  var rate = (s.totalExec / s.totalBudget * 100).toFixed(1);
-  var bal  = s.totalBudget - s.totalExec;
-  var end  = new Date('2026-12-31');
-  var now  = new Date();
-  var dDay = Math.ceil((end - now) / 86400000);
-  var remM = Math.max(1, Math.ceil((end - now) / (86400000 * 30)));
-  var monthly = (bal / remM / 100000000).toFixed(1) + '억/월';
+  var s   = data.summary;
+  var now = new Date();
+  var end = new Date('2025-12-31');
+  var dDay    = Math.ceil((end - now) / 86400000);
+  var remM    = Math.max(1, Math.ceil((end - now) / (86400000 * 30)));
+  var balance = s['총잔액'] || (s['총예산'] - s['총집행액']);
+  var monthly = wonToEok(balance / remM) + '억/월';
+  var rate    = s['전체집행률'] || 0;
 
-  // 헤더
-  document.getElementById('updateTime').textContent = '최종 업데이트: ' + data.updatedAt;
-  // 요약
-  document.getElementById('totalExecCard').textContent  = eok(s.totalExec) + '억';
-  document.getElementById('execRateSub').textContent    = '집행률 ' + rate + '%';
-  document.getElementById('totalBalanceCard').textContent = eok(bal) + '억';
-  document.getElementById('balanceSub').textContent     = '월평균 ' + monthly + ' 집행 필요';
-  document.getElementById('dDayCard').textContent       = 'D-' + dDay;
-  document.getElementById('progressLabel').textContent  = rate + '%';
-  setTimeout(function() { document.getElementById('progressFill').style.width = Math.min(parseFloat(rate), 100) + '%'; }, 100);
+  // 업데이트 시각 (UTC → KST)
+  var updDt = new Date(data.updated_at);
+  var kst   = new Date(updDt.getTime() + 9 * 3600000);
+  var refDate = kst.toISOString().slice(0, 10);
+  document.getElementById('updateTime').textContent =
+    '최종 업데이트: ' + kst.toISOString().slice(0, 16).replace('T', ' ') + ' KST';
 
-  // 단위사업 탭 보조
-  document.getElementById('dDayMain').textContent     = 'D-' + dDay;
-  document.getElementById('remainMonths').textContent = remM + '개월';
-  document.getElementById('monthlyNeeded').textContent = monthly;
-  document.getElementById('refDateDisp').textContent  = data.refDate;
-  document.getElementById('projRefDate').textContent  = data.refDate + ' 기준';
+  // 요약 카드
+  document.getElementById('totalExecCard').textContent    = wonToEok(s['총집행액']) + '억';
+  document.getElementById('execRateSub').textContent      = '집행률 ' + rate.toFixed(1) + '%';
+  document.getElementById('totalBalanceCard').textContent = wonToEok(balance) + '억';
+  document.getElementById('balanceSub').textContent       = '월평균 ' + monthly + ' 집행 필요';
+  document.getElementById('dDayCard').textContent         = dDay >= 0 ? 'D-' + dDay : 'D+' + Math.abs(dDay);
+  document.getElementById('progressLabel').textContent    = rate.toFixed(1) + '%';
 
-  // 재원
-  var govRate  = (s.gov  / 12000000000 * 100).toFixed(1);
-  var cityRate = (s.city / 9120000000  * 100).toFixed(1);
-  var provRate = (s.prov / 2880000000  * 100).toFixed(1);
   setTimeout(function() {
-    document.getElementById('govFill2').style.width  = govRate  + '%';
-    document.getElementById('cityFill2').style.width = cityRate + '%';
-    document.getElementById('provFill2').style.width = provRate + '%';
-  }, 200);
-  document.getElementById('govRate2').textContent  = govRate  + '%';
-  document.getElementById('cityRate2').textContent = cityRate + '%';
-  document.getElementById('provRate2').textContent = provRate + '%';
+    document.getElementById('progressFill').style.width = Math.min(rate, 100) + '%';
+  }, 100);
 
-  renderBimok(data.budgetItems, data.refDate);
-  renderProjects(data.projects);
-  renderRisks(data.risks);
+  // 리스크 탭 보조
+  document.getElementById('dDayMain').textContent     = dDay >= 0 ? 'D-' + dDay : 'D+' + Math.abs(dDay);
+  document.getElementById('remainMonths').textContent  = remM + '개월';
+  document.getElementById('monthlyNeeded').textContent = monthly;
+  document.getElementById('refDateDisp').textContent   = refDate;
+
+  // 재원 (전체 집행률 기준으로 동일하게 표시)
+  setTimeout(function() {
+    document.getElementById('govFill').style.width  = Math.min(rate, 100) + '%';
+    document.getElementById('cityFill').style.width = Math.min(rate, 100) + '%';
+    document.getElementById('provFill').style.width = Math.min(rate, 100) + '%';
+  }, 200);
+  document.getElementById('govRate').textContent  = rate.toFixed(1) + '%';
+  document.getElementById('cityRate').textContent = rate.toFixed(1) + '%';
+  document.getElementById('provRate').textContent = rate.toFixed(1) + '%';
+
+  renderBimok(data.bimok_summary, refDate);
+  renderItems(data.items);
+  renderRisks(data.bimok_summary, s['상태별'], dDay, rate);
 }
 
-// ── 비목별 ──
-function renderBimok(items, refDate) {
-  document.getElementById('bimokRefDate').textContent = (refDate || '') + ' 기준';
-  document.getElementById('bimokCount').textContent = items.length + '개 비목';
+// ════════════════════════════════════
+// TAB1: 비목별
+// bimok_summary: [{비목, 예산, 집행, 잔액, 집행률, 항목수}]
+// ════════════════════════════════════
+function renderBimok(bimoks, refDate) {
+  document.getElementById('bimokRefDate').textContent = refDate + ' 기준';
+  document.getElementById('bimokCount').textContent   = bimoks.length + '개 비목';
 
   // 테이블
   var tbody = document.getElementById('bimokTableBody');
-  tbody.innerHTML = items.map(function(b) {
-    var bal  = (b.budget - b.exec).toFixed(2);
-    var rc   = rateClass(b.rate);
-    var bc   = barClass(b.rate);
-    var fillW = Math.min(b.rate, 130);
-    var sc   = statusClass(b.status);
+  if (!bimoks.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">데이터 없음</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = bimoks.map(function(b) {
+    var rate = b['집행률'] || 0;
+    var rc   = rateClass(rate);
+    var bc   = barClass(rate);
     return '<tr>' +
-      '<td class="name-cell">' + b.name + '</td>' +
-      '<td class="mono">' + eokB(b.budget) + '</td>' +
-      '<td class="mono">' + eokB(b.exec) + '</td>' +
-      '<td class="mono" style="color:' + (parseFloat(bal) < 0 ? 'var(--red)' : 'var(--muted)') + '">' + bal + '</td>' +
-      '<td><span class="' + rc + '">' + b.rate + '%</span> <div class="mini-bar-track" style="display:inline-block;margin-left:4px;"><div class="mini-bar-fill ' + bc + '" style="width:' + Math.min(fillW, 100) + '%;"></div></div></td>' +
-      '<td><span class="status ' + sc + '">' + b.status + '</span></td>' +
-      '<td class="note-cell">' + (b.note || '') + '</td>' +
+      '<td class="name-cell">' + (b['비목'] || '기타') + '</td>' +
+      '<td class="mono">' + wonToEok(b['예산']) + '</td>' +
+      '<td class="mono">' + wonToEok(b['집행']) + '</td>' +
+      '<td class="mono" style="color:' + (b['잔액'] < 0 ? 'var(--red)' : 'var(--muted)') + '">' + wonToEok(b['잔액']) + '</td>' +
+      '<td>' +
+        '<span class="' + rc + '">' + rate.toFixed(1) + '%</span> ' +
+        '<div class="mini-bar-track" style="display:inline-block;margin-left:4px;">' +
+          '<div class="mini-bar-fill ' + bc + '" style="width:' + Math.min(rate, 100) + '%;"></div>' +
+        '</div>' +
+      '</td>' +
+      '<td class="mono" style="color:var(--muted)">' + (b['항목수'] || 0) + '건</td>' +
     '</tr>';
   }).join('');
 
   // 차트
-  var labels = items.map(function(b) { return b.name; });
-  var budgets = items.map(function(b) { return b.budget; });
-  var execs   = items.map(function(b) { return b.exec; });
+  var labels  = bimoks.map(function(b) { return b['비목'] || '기타'; });
+  var budgets = bimoks.map(function(b) { return parseFloat(wonToEok(b['예산'])); });
+  var execs   = bimoks.map(function(b) { return parseFloat(wonToEok(b['집행'])); });
+
   if (charts.bimok) charts.bimok.destroy();
   charts.bimok = new Chart(document.getElementById('bimokChart').getContext('2d'), {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [
-        { label: '예산', data: budgets, backgroundColor: 'rgba(37,99,235,.3)', borderColor: 'rgba(37,99,235,.6)', borderWidth: 1, borderRadius: 4 },
-        { label: '집행', data: execs,   backgroundColor: function(ctx) {
-          var v = execs[ctx.dataIndex];
-          var b2 = budgets[ctx.dataIndex];
-          return v > b2 ? 'rgba(239,68,68,.7)' : v >= b2 * 0.8 ? 'rgba(16,185,129,.7)' : v >= b2 * 0.3 ? 'rgba(245,158,11,.7)' : 'rgba(37,99,235,.5)';
-        }, borderRadius: 4 }
+        { label: '예산(억)', data: budgets, backgroundColor: 'rgba(37,99,235,.3)', borderColor: 'rgba(37,99,235,.6)', borderWidth: 1, borderRadius: 4 },
+        { label: '집행(억)', data: execs,   backgroundColor: execs.map(function(e, i) {
+          var r = budgets[i] > 0 ? e / budgets[i] * 100 : 0;
+          return r > 100 ? 'rgba(239,68,68,.7)' : r >= 80 ? 'rgba(16,185,129,.7)' : r >= 30 ? 'rgba(245,158,11,.7)' : 'rgba(37,99,235,.5)';
+        }), borderRadius: 4 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { labels: { color: '#64748b', font: { family: 'Noto Sans KR', size: 11 } } },
-        tooltip: { backgroundColor: '#161d2e', borderColor: '#1e2d47', borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#94a3b8',
+        tooltip: { backgroundColor: '#161d2e', borderColor: '#1e2d47', borderWidth: 1,
+          titleColor: '#e2e8f0', bodyColor: '#94a3b8',
           callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.raw + '억원'; } }
         }
       },
@@ -624,94 +581,131 @@ function renderBimok(items, refDate) {
   });
 
   // 상태 요약
-  var statusList = document.getElementById('bimokStatusList');
-  var groups = { '🟢 정상': [], '🟡 주의': [], '🟠 초과': [], '🔴 미집행': [] };
-  items.forEach(function(b) {
-    var k = b.status;
-    if (!groups[k]) groups[k] = [];
-    groups[k].push(b.name + ' (' + b.rate + '%)');
+  var groups = { '정상(80%↑)': [], '주의(30~79%)': [], '저조(1~29%)': [], '미집행(0%)': [], '초과(100%↑)': [] };
+  bimoks.forEach(function(b) {
+    var r = b['집행률'] || 0;
+    var n = b['비목'] || '기타';
+    if (r > 100)     groups['초과(100%↑)'].push(n + ' ' + r.toFixed(0) + '%');
+    else if (r >= 80) groups['정상(80%↑)'].push(n + ' ' + r.toFixed(0) + '%');
+    else if (r >= 30) groups['주의(30~79%)'].push(n + ' ' + r.toFixed(0) + '%');
+    else if (r > 0)   groups['저조(1~29%)'].push(n + ' ' + r.toFixed(0) + '%');
+    else              groups['미집행(0%)'].push(n);
   });
-  var levelMap = { '🟢 정상': 'done', '🟡 주의': 'warn', '🟠 초과': 'over', '🔴 미집행': 'none' };
-  statusList.innerHTML = Object.keys(groups).filter(function(k) { return groups[k].length; }).map(function(k) {
-    return '<div class="risk-item ' + (k.includes('초과') ? 'orange' : k.includes('미집행') ? 'red' : k.includes('주의') ? 'yellow' : 'green') + '">' +
-      '<div class="risk-dot"></div>' +
-      '<div><div class="risk-text">' + k + ' (' + groups[k].length + '건)</div>' +
-      '<div class="risk-tag">' + groups[k].join(' · ') + '</div></div></div>';
-  }).join('');
+  var levelMap = { '정상(80%↑)': 'green', '주의(30~79%)': 'yellow', '저조(1~29%)': 'orange', '미집행(0%)': 'red', '초과(100%↑)': 'orange' };
+  document.getElementById('statusSummaryList').innerHTML =
+    Object.keys(groups).filter(function(k) { return groups[k].length; }).map(function(k) {
+      return '<div class="risk-item ' + levelMap[k] + '">' +
+        '<div class="risk-dot"></div>' +
+        '<div><div class="risk-text">' + k + ' — ' + groups[k].length + '건</div>' +
+        '<div class="risk-tag">' + groups[k].join(' · ') + '</div></div></div>';
+    }).join('');
 
   // 이슈
-  var issueList = document.getElementById('bimokIssueList');
   var issues = [];
-  items.forEach(function(b) {
-    if (b.rate > 100)  issues.push({ level: 'orange', text: b.name + ' 초과집행 ' + b.rate + '% — ' + b.note, tag: b.name });
-    if (b.rate === 0 && b.budget > 1)  issues.push({ level: 'red',    text: b.name + ' 미집행 — ' + b.note, tag: b.name });
-    if (b.rate > 0 && b.rate < 30 && b.budget > 10) issues.push({ level: 'yellow', text: b.name + ' 집행 저조 ' + b.rate + '% — ' + b.note, tag: b.name });
+  bimoks.forEach(function(b) {
+    var r = b['집행률'] || 0;
+    var n = b['비목'] || '기타';
+    if (r > 100)                 issues.push({ level: 'orange', text: n + ' 초과집행 ' + r.toFixed(1) + '%', tag: '잔액: ' + wonToEok(b['잔액']) + '억' });
+    else if (r === 0 && b['예산'] > 0) issues.push({ level: 'red',    text: n + ' 미집행 상태', tag: '예산: ' + wonToEok(b['예산']) + '억' });
+    else if (r < 30 && r > 0)   issues.push({ level: 'yellow', text: n + ' 집행 저조 ' + r.toFixed(1) + '%', tag: '예산: ' + wonToEok(b['예산']) + '억' });
   });
-  if (!issues.length) issues.push({ level: 'green', text: '현재 이슈 없음', tag: '' });
-  issueList.innerHTML = issues.map(function(r) {
-    var lc = r.level === 'orange' ? 'orange' : r.level === 'red' ? 'red' : r.level === 'yellow' ? 'yellow' : 'green';
-    return '<div class="risk-item ' + lc + '"><div class="risk-dot"></div><div><div class="risk-text">' + r.text + '</div><div class="risk-tag">' + r.tag + '</div></div></div>';
+  if (!issues.length) issues.push({ level: 'green', text: '현재 이슈 없음', tag: '모든 비목 정상 범위' });
+  document.getElementById('bimokIssueList').innerHTML = issues.map(function(r) {
+    return '<div class="risk-item ' + r.level + '"><div class="risk-dot"></div>' +
+      '<div><div class="risk-text">' + r.text + '</div><div class="risk-tag">' + r.tag + '</div></div></div>';
   }).join('');
 }
 
-// ── 단위사업 ──
-function renderProjects(projects) {
-  document.getElementById('projectCount').textContent = projects.length + '개 사업';
-  var tbody = document.getElementById('projectTableBody');
-  tbody.innerHTML = projects.map(function(p) {
-    var bal = eok(p.budget - p.exec);
-    var rc  = rateClass(p.rate);
-    var bc  = barClass(p.rate);
-    var sc  = p.status.includes('완료') ? 'status-done' :
-              p.status.includes('진행') ? 'status-active' :
-              p.status.includes('신설') ? 'status-new'   : 'status-wait';
-    return '<tr><td class="name-cell">' + p.name + '</td>' +
-      '<td class="mono">' + eok(p.budget) + '억</td>' +
-      '<td class="mono">' + eok(p.exec) + '억</td>' +
-      '<td class="mono" style="color:' + (parseFloat(bal) < 0 ? 'var(--red)' : 'var(--muted)') + '">' + bal + '억</td>' +
-      '<td><span class="' + rc + '">' + p.rate + '%</span>' +
-        '<div class="mini-bar-track" style="display:inline-block;margin-left:4px;"><div class="mini-bar-fill ' + bc + '" style="width:' + Math.min(p.rate, 100) + '%;"></div></div></td>' +
-      '<td class="mono" style="color:var(--muted)">' + p.progress + '%</td>' +
-      '<td><span class="status ' + sc + '">' + p.status + '</span></td></tr>';
+// ════════════════════════════════════
+// TAB2: 세부 항목
+// items: [{항목명, 비목, 세목, 총예산, 사용금액, 잔액, 집행률, 상태}]
+// ════════════════════════════════════
+function renderItems(items) {
+  document.getElementById('itemCount').textContent = (items || []).length + '개 항목';
+  var tbody = document.getElementById('itemTableBody');
+  if (!items || !items.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px;">데이터 없음</td></tr>';
+    return;
+  }
+  tbody.innerHTML = items.map(function(item) {
+    var rate = item['집행률'] || 0;
+    var rc   = rateClass(rate);
+    var bc   = barClass(rate);
+    var sc   = statusCss(item['상태']);
+    return '<tr>' +
+      '<td class="name-cell" style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="' + item['항목명'] + '">' + item['항목명'] + '</td>' +
+      '<td style="color:var(--muted);font-size:12px;">' + (item['비목'] || '') + '</td>' +
+      '<td style="color:var(--muted);font-size:12px;">' + (item['세목'] || '') + '</td>' +
+      '<td class="mono">' + fmtWon(item['총예산']) + '</td>' +
+      '<td class="mono">' + fmtWon(item['사용금액']) + '</td>' +
+      '<td class="mono" style="color:' + (item['잔액'] < 0 ? 'var(--red)' : 'var(--muted)') + '">' + fmtWon(item['잔액']) + '</td>' +
+      '<td>' +
+        '<span class="' + rc + '">' + rate.toFixed(1) + '%</span> ' +
+        '<div class="mini-bar-track" style="display:inline-block;margin-left:4px;">' +
+          '<div class="mini-bar-fill ' + bc + '" style="width:' + Math.min(rate, 100) + '%;"></div>' +
+        '</div>' +
+      '</td>' +
+      '<td><span class="status ' + sc + '">' + (item['상태'] || '—') + '</span></td>' +
+    '</tr>';
   }).join('');
-
-  // 차트
-  var labels  = projects.map(function(p) { return p.name.replace(/[①②③④⑤⑥⑦⑧⑨]\s/, ''); });
-  var rates   = projects.map(function(p) { return Math.min(p.rate, 130); });
-  var colors  = projects.map(function(p) { return p.rate > 100 ? '#ef4444' : p.rate >= 80 ? '#10b981' : p.rate >= 30 ? '#f59e0b' : p.rate > 0 ? '#2563eb' : '#1e2d47'; });
-  if (charts.proj) charts.proj.destroy();
-  charts.proj = new Chart(document.getElementById('projChart').getContext('2d'), {
-    type: 'bar',
-    data: { labels: labels, datasets: [{ label: '집행률(%)', data: rates, backgroundColor: colors, borderRadius: 4, borderSkipped: false }] },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#161d2e', borderColor: '#1e2d47', borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#94a3b8', callbacks: { label: function(ctx) { return '집행률: ' + ctx.raw + '%'; } } } },
-      scales: {
-        x: { grid: { color: 'rgba(30,45,71,.4)' }, ticks: { color: '#64748b', font: { family: 'Noto Sans KR', size: 11 } } },
-        y: { min: 0, max: 130, grid: { color: 'rgba(30,45,71,.4)' }, ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 11 }, callback: function(v) { return v + '%'; } } }
-      }
-    }
-  });
 }
 
-// ── 리스크 ──
-function renderRisks(risks) {
-  document.getElementById('riskCount').textContent = risks.length + '건';
+// ════════════════════════════════════
+// TAB3: 리스크
+// ════════════════════════════════════
+function renderRisks(bimoks, statusBy, dDay, rate) {
+  var risks = [];
+
+  // D-Day 경고
+  if (dDay <= 90)  risks.push({ level: 'red',    text: '사업 종료 ' + dDay + '일 전 — 집행 가속 필요', tag: '2025.12.31 마감' });
+  else if (dDay <= 180) risks.push({ level: 'orange', text: '사업 종료 ' + dDay + '일 전 — 집행 모니터링 강화', tag: '2025.12.31 마감' });
+
+  // 전체 집행률 경고
+  if (rate < 30) risks.push({ level: 'red',    text: '전체 집행률 ' + rate.toFixed(1) + '% — 심각한 저조', tag: '집행 촉진 조치 필요' });
+  else if (rate < 60) risks.push({ level: 'yellow', text: '전체 집행률 ' + rate.toFixed(1) + '% — 집행 촉진 필요', tag: '목표 집행률 대비 점검' });
+
+  // 비목별 리스크
+  bimoks.forEach(function(b) {
+    var r = b['집행률'] || 0;
+    var n = b['비목'] || '기타';
+    if (r > 110)   risks.push({ level: 'red',    text: n + ' 예산 초과집행 ' + r.toFixed(1) + '%', tag: '예산 조정 검토 필요' });
+    else if (r > 100) risks.push({ level: 'orange', text: n + ' 초과집행 ' + r.toFixed(1) + '%', tag: '집행 모니터링' });
+    else if (r === 0 && b['예산'] > 0) risks.push({ level: 'red',  text: n + ' 미집행 — 계획 대비 0%', tag: '예산: ' + wonToEok(b['예산']) + '억' });
+    else if (r < 20 && r > 0) risks.push({ level: 'yellow', text: n + ' 집행 저조 ' + r.toFixed(1) + '%', tag: '집행 가속 필요' });
+  });
+
+  if (!risks.length) risks.push({ level: 'green', text: '현재 주요 리스크 없음', tag: '모든 항목 정상 범위 내' });
+
+  document.getElementById('riskCount').textContent = risks.filter(function(r) { return r.level !== 'green'; }).length + '건';
   document.getElementById('riskList').innerHTML = risks.map(function(r) {
-    return '<div class="risk-item ' + r.level + '"><div class="risk-dot"></div><div><div class="risk-text">' + r.text + '</div><div class="risk-tag">' + r.tag + '</div></div></div>';
+    return '<div class="risk-item ' + r.level + '"><div class="risk-dot"></div>' +
+      '<div><div class="risk-text">' + r.text + '</div><div class="risk-tag">' + r.tag + '</div></div></div>';
   }).join('');
 }
 
-// ════════════════════════════════════════
+// ════════════════════════════════════
 // 초기화
-// ════════════════════════════════════════
+// ════════════════════════════════════
 (async function() {
   var data = await loadData();
-  if (!data) { document.getElementById('loadingOverlay').innerHTML = '<div style="color:#ef4444;font-family:monospace">❌ data.json 로드 실패</div>'; return; }
+  if (!data) {
+    document.getElementById('loadingOverlay').innerHTML =
+      '<div style="color:#ef4444;font-family:monospace;text-align:center;padding:24px;">' +
+      '❌ data.json 로드 실패<br>' +
+      '<small style="color:#64748b;margin-top:8px;display:block;">GitHub Actions 워크플로우 실행 여부를 확인해주세요.</small>' +
+      '</div>';
+    return;
+  }
+
   renderAll(data);
   document.getElementById('loadingOverlay').classList.add('hidden');
   document.getElementById('mainContent').style.opacity = '1';
-  setInterval(async function() { var d = await loadData(); if (d) renderAll(d); }, 300000);
+
+  // 5분마다 자동 새로고침
+  setInterval(async function() {
+    var d = await loadData();
+    if (d) renderAll(d);
+  }, 300000);
 })();
 </script>
 </body>
