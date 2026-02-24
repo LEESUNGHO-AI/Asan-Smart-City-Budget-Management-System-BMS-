@@ -1,0 +1,203 @@
+name: Notion → GitHub Pages 자동 동기화
+
+on:
+  schedule:
+    - cron: '0 0,5,9 * * *'   # 매일 09:00, 14:00, 18:00 KST
+    - cron: '*/30 * * * *'     # 30분마다 자동 실행
+  workflow_dispatch:            # 수동 실행 버튼
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Notion 데이터 가져오기
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: 54bfedc3769e43e8bdbcd59f22008417
+        run: |
+          python3 << 'EOF'
+          import urllib.request
+          import json
+          import os
+          from datetime import datetime
+
+          API_KEY = os.environ["NOTION_API_KEY"]
+          DB_ID   = os.environ["NOTION_DATABASE_ID"]
+          BASE    = "https://api.notion.com/v1"
+
+          headers = {
+              "Authorization": f"Bearer {API_KEY}",
+              "Notion-Version": "2022-06-28",
+              "Content-Type": "application/json"
+          }
+
+          def notion_request(url, payload=None):
+              data = json.dumps(payload).encode() if payload else None
+              req  = urllib.request.Request(url, data=data, headers=headers,
+                                            method="POST" if data else "GET")
+              with urllib.request.urlopen(req) as r:
+                  return json.loads(r.read())
+
+          # ── DB 전체 조회 (페이지네이션) ──
+          pages, cursor = [], None
+          while True:
+              body = {"page_size": 100}
+              if cursor:
+                  body["start_cursor"] = cursor
+              res = notion_request(f"{BASE}/databases/{DB_ID}/query", body)
+              pages.extend(res.get("results", []))
+              if not res.get("has_more"):
+                  break
+              cursor = res.get("next_cursor")
+
+          print(f"✅ Notion 항목 {len(pages)}개 조회 완료")
+
+          # ── 속성 추출 헬퍼 ──
+          def get_title(props, key):
+              v = props.get(key, {}).get("title", [])
+              return v[0]["plain_text"].strip() if v else ""
+
+          def get_number(props, key):
+              return props.get(key, {}).get("number") or 0
+
+          def get_select(props, key):
+              s = props.get(key, {}).get("select")
+              return s["name"] if s else ""
+
+          def get_text(props, key):
+              v = props.get(key, {}).get("rich_text", [])
+              return v[0]["plain_text"].strip() if v else ""
+
+          def get_date(props, key):
+              d = props.get(key, {}).get("date")
+              return d["start"] if d else ""
+
+          # ── 데이터 변환 ──
+          items = []
+          total_budget   = 0
+          total_executed = 0
+          total_balance  = 0
+
+          for p in pages:
+              props = p["properties"]
+              item_name = get_title(props, "항목명")
+              if not item_name:
+                  continue
+
+              budget   = get_number(props, "총예산")
+              executed = get_number(props, "사용금액(합계)")
+              balance  = get_number(props, "잔액")
+              rate     = get_number(props, "집행률")
+              bimok    = get_select(props, "비목")
+              semok    = get_text(props, "세목")
+              status   = get_select(props, "상태")
+              y2024_b  = get_number(props, "2024년예산")
+              y2024_e  = get_number(props, "2024년집행")
+              synced   = get_date(props, "최종동기화")
+
+              # 집행률 정규화 (소수 → 퍼센트)
+              if rate and rate <= 1:
+                  rate = round(rate * 100, 2)
+
+              items.append({
+                  "id":        p["id"],
+                  "항목명":    item_name,
+                  "비목":      bimok,
+                  "세목":      semok,
+                  "총예산":    budget,
+                  "사용금액":  executed,
+                  "잔액":      balance,
+                  "집행률":    rate,
+                  "상태":      status,
+                  "2024년예산": y2024_b,
+                  "2024년집행": y2024_e,
+                  "최종동기화": synced
+              })
+
+              total_budget   += budget
+              total_executed += executed
+              total_balance  += balance
+
+          # ── 비목별 집계 ──
+          bimok_summary = {}
+          for item in items:
+              b = item["비목"] or "기타"
+              if b not in bimok_summary:
+                  bimok_summary[b] = {"예산": 0, "집행": 0, "잔액": 0, "항목수": 0}
+              bimok_summary[b]["예산"]   += item["총예산"]
+              bimok_summary[b]["집행"]   += item["사용금액"]
+              bimok_summary[b]["잔액"]   += item["잔액"]
+              bimok_summary[b]["항목수"] += 1
+
+          # ── 전체 집행률 계산 ──
+          overall_rate = round(total_executed / total_budget * 100, 2) if total_budget else 0
+
+          # ── 상태별 카운트 ──
+          status_count = {"정상": 0, "주의": 0, "초과": 0, "미집행": 0, "기타": 0}
+          for item in items:
+              s = item["상태"]
+              if s in status_count:
+                  status_count[s] += 1
+              else:
+                  status_count["기타"] += 1
+
+          # ── 최종 JSON ──
+          output = {
+              "updated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "summary": {
+                  "총사업비":    240_000_000_000,
+                  "총예산":      total_budget,
+                  "총집행액":    total_executed,
+                  "총잔액":      total_balance,
+                  "전체집행률":  overall_rate,
+                  "항목수":      len(items),
+                  "상태별":      status_count
+              },
+              "bimok_summary": [
+                  {
+                      "비목": k,
+                      "예산": v["예산"],
+                      "집행": v["집행"],
+                      "잔액": v["잔액"],
+                      "집행률": round(v["집행"] / v["예산"] * 100, 2) if v["예산"] else 0,
+                      "항목수": v["항목수"]
+                  }
+                  for k, v in sorted(bimok_summary.items(),
+                                     key=lambda x: x[1]["예산"], reverse=True)
+              ],
+              "items": items
+          }
+
+          os.makedirs("data", exist_ok=True)
+          with open("data/budget.json", "w", encoding="utf-8") as f:
+              json.dump(output, f, ensure_ascii=False, indent=2)
+
+          print(f"✅ data/budget.json 저장 완료")
+          print(f"   항목수: {len(items)}개")
+          print(f"   총집행률: {overall_rate}%")
+          print(f"   업데이트: {output['updated_at']}")
+          EOF
+
+      - name: 변경사항 커밋 & 푸시
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/budget.json
+          if git diff --staged --quiet; then
+            echo "ℹ️ 변경 없음 - 커밋 건너뜀"
+          else
+            git commit -m "🔄 예산 데이터 자동 업데이트 $(date +'%Y-%m-%d %H:%M KST' -d '+9 hours')"
+            git push
+            echo "✅ GitHub Pages 데이터 업데이트 완료"
+          fi
