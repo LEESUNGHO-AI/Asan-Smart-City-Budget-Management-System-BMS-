@@ -1,42 +1,150 @@
 {
-  "updatedAt": "2026-02-19",
-  "refDate": "2026-02-12",
+  "updatedAt": "2026-02-24",
+  "refDate": "2026-02-06",
   "summary": {
     "totalBudget": 24000000000,
-    "totalExec":    9806000000,
-    "gov":          4903000000,
-    "city":         3726280000,
-    "prov":         1176720000
+    "totalExec": 2461000000,
+    "gov": 1230500000,
+    "city": 935180000,
+    "prov": 295320000
   },
   "projects": [
-    { "name": "① 유무선 네트워크 구축",      "budget": 400000000,   "exec": 456000000,   "rate": 114.0, "progress": 95, "status": "✅ 완료",    "contractor": "사인텔레콤" },
-    { "name": "② 서비스 인프라 플랫폼",      "budget": 2700000000,  "exec": 0,           "rate": 0,     "progress": 85, "status": "🔄 진행중", "contractor": "우선협상대상자 선정완료" },
-    { "name": "③ 이노베이션 센터 구축·운영", "budget": 1346000000,  "exec": 1210000000,  "rate": 89.9,  "progress": 95, "status": "✅ 완료",    "contractor": "호서대학교 KTX캠퍼스" },
-    { "name": "④ 디지털 OASIS SPOT 구축",   "budget": 3554000000,  "exec": 15000000,    "rate": 0.4,   "progress": 2,  "status": "⏸️ 대기",   "contractor": "미정" },
-    { "name": "⑤ SDDC Platform 구축",       "budget": 2700000000,  "exec": 780000000,   "rate": 28.9,  "progress": 35, "status": "🔄 진행중", "contractor": "한국정보기술컨소시엄" },
-    { "name": "⑥ AI 통합관제 플랫폼",       "budget": 1600000000,  "exec": 0,           "rate": 0,     "progress": 0,  "status": "⏸️ 대기",   "contractor": "미정" },
-    { "name": "⑦ OASIS 정보관리 서비스",    "budget": 2300000000,  "exec": 0,           "rate": 0,     "progress": 5,  "status": "🔄 진행중", "contractor": "선정예정" },
-    { "name": "⑧ DRT 모빌리티 플랫폼",      "budget": 1000000000,  "exec": 0,           "rate": 0,     "progress": 0,  "status": "⏸️ 대기",   "contractor": "미정" },
-    { "name": "⑨ 감리용역 (신설)",           "budget": 160000000,   "exec": 0,           "rate": 0,     "progress": 0,  "status": "🆕 신설",   "contractor": "미정" }
-  ],
-  "budgetItems": [
-    { "name": "인건비",                "budget": 19.0, "exec": 18.3,  "rate": 96.3,  "status": "🟢 정상",   "note": "정규직+계약직 (2024년 기준)" },
-    { "name": "여비",                  "budget": 0.4,  "exec": 0.8,   "rate": 200.0, "status": "🟠 초과",   "note": "⚠️ 초과집행 200% — 비목간 전용 또는 실시계획 변경 필요" },
-    { "name": "운영비",                "budget": 7.5,  "exec": 4.3,   "rate": 57.3,  "status": "🟡 주의",   "note": "부스제작비 초과(184%) 포함" },
-    { "name": "건설비",                "budget": 99.4, "exec": 23.25, "rate": 23.4,  "status": "🟡 주의",   "note": "OASIS SPOT·SDDC·네트워크·WiFi·이노베이션센터 등 7개 공사" },
-    { "name": "무형자산 (SW)",         "budget": 90.5, "exec": 38.25, "rate": 42.3,  "status": "🟡 주의",   "note": "AI관제·정보관리서비스·DRT SW 등 6개 플랫폼" },
-    { "name": "연구개발비",            "budget": 10.0, "exec": 0,     "rate": 0,     "status": "🔴 미집행",  "note": "DRT 플랫폼 미착수" },
-    { "name": "사업비배분 (간접보조)", "budget": 13.0, "exec": 13.0,  "rate": 100.0, "status": "🟢 정상",   "note": "KAIST 2억·충남연구원 2억·호서대 9억 교부 완료" },
-    { "name": "유형자산",              "budget": 0.2,  "exec": 0.16,  "rate": 80.0,  "status": "🟢 정상",   "note": "이노베이션 센터 PC" }
+    {
+      "name": "? ???? (??)",
+      "budget": 160000000,
+      "exec": 0,
+      "rate": 0,
+      "progress": 0,
+      "status": "? ??",
+      "contractor": "??",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? AI ???? ???",
+      "budget": 1600000000,
+      "exec": 0,
+      "rate": 0,
+      "progress": 0,
+      "status": "?? ??",
+      "contractor": "??",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? ??? ??? ???",
+      "budget": 2700000000,
+      "exec": 0,
+      "rate": 0,
+      "progress": 0.85,
+      "status": "? ???",
+      "contractor": "??????? ????",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? ??? ???? ??",
+      "budget": 400000000,
+      "exec": 456000000,
+      "rate": 114,
+      "progress": 0.95,
+      "status": "? ??",
+      "contractor": "?????",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? ??? OASIS SPOT ??",
+      "budget": 3554000000,
+      "exec": 15000000,
+      "rate": 0.4,
+      "progress": 0.02,
+      "status": "?? ??",
+      "contractor": "??",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? ????? ?? ?? ? ??",
+      "budget": 1346000000,
+      "exec": 1210000000,
+      "rate": 89.9,
+      "progress": 0.95,
+      "status": "? ??",
+      "contractor": "????? KTX???",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? ??? OASIS ???? ???",
+      "budget": 2300000000,
+      "exec": 0,
+      "rate": 0,
+      "progress": 0.05,
+      "status": "? ???",
+      "contractor": "????",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? SDDC Platform ??",
+      "budget": 2700000000,
+      "exec": 780000000,
+      "rate": 28.9,
+      "progress": 0.35,
+      "status": "? ???",
+      "contractor": "??????????",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "? DRT(????? ????) ???",
+      "budget": 1000000000,
+      "exec": 0,
+      "rate": 0,
+      "progress": 0,
+      "status": "?? ??",
+      "contractor": "??",
+      "refDate": "2026-02-06"
+    },
+    {
+      "name": "?? ???? ?? ??? ??? ?? - Claude",
+      "budget": 0,
+      "exec": 0,
+      "rate": 0,
+      "progress": 0,
+      "status": "?? ??",
+      "contractor": "",
+      "refDate": ""
+    },
+    {
+      "name": "??? ????? ? ?? ?? ??? - Claude",
+      "budget": 0,
+      "exec": 0,
+      "rate": 0,
+      "progress": 0,
+      "status": "?? ??",
+      "contractor": "",
+      "refDate": ""
+    }
   ],
   "risks": [
-    { "level": "red",    "text": "예산 집행률 40.9% — 잔여 142억원 10개월 내 집행 필요 (월평균 14.2억)",  "tag": "예산집행" },
-    { "level": "red",    "text": "OASIS SPOT 착공 지연 — 35.54억원 (집행률 0.4%), 부지승인 대기",        "tag": "④ OASIS SPOT" },
-    { "level": "orange", "text": "여비 초과집행 200% — 예산 4천만원 대비 8천만원 집행, 비목전용 필요",   "tag": "여비" },
-    { "level": "orange", "text": "서비스 인프라 선급금 미지급 — 27억 계약 후 집행 미착수",               "tag": "② 서비스인프라" },
-    { "level": "orange", "text": "SDDC 구축 일정 지연 위험 — 28.9% 집행, 2026.6 완료 목표",             "tag": "⑤ SDDC" },
-    { "level": "yellow", "text": "연구개발비 미집행 — 10억 DRT 플랫폼 설계 지연",                        "tag": "⑧ DRT·연구개발비" },
-    { "level": "yellow", "text": "건설비 집행 저조 — 99.4억 예산 중 23.4% 집행",                        "tag": "건설비" },
-    { "level": "yellow", "text": "감리용역 업체선정 지연 — 1.6억 미집행",                                "tag": "⑨ 감리" }
+    {
+      "level": "red",
+      "text": "?? ??? 10.3% ? ?? 215.4?? 11?? ? ?? ?? (??? 19.6?)",
+      "tag": "????"
+    },
+    {
+      "level": "red",
+      "text": "AI ???? ??? ??? ? 16.0?? ?? 0%",
+      "tag": "? AI ??"
+    },
+    {
+      "level": "orange",
+      "text": "??? ???? ?? ?? ???? 114% ? ???? ?? ?? ??",
+      "tag": "? ??? ?"
+    },
+    {
+      "level": "yellow",
+      "text": "??? OASIS SPOT ?? ?? ?? 0.4% ? ?? ?? ??",
+      "tag": "? ??? O"
+    },
+    {
+      "level": "red",
+      "text": "DRT(????? ????) ??? ??? ? 10.0?? ?? 0%",
+      "tag": "? DRT(?"
+    }
   ]
 }
