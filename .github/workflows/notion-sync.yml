@@ -180,10 +180,12 @@ jobs:
           }
 
           os.makedirs("data", exist_ok=True)
-          with open("data/budget.json", "w", encoding="utf-8") as f:
-              json.dump(output, f, ensure_ascii=False, indent=2)
+          # ✅ 루트(data.json)와 하위폴더(data/budget.json) 모두 저장
+          for path in ["data.json", "data/budget.json"]:
+              with open(path, "w", encoding="utf-8") as f:
+                  json.dump(output, f, ensure_ascii=False, indent=2)
+              print(f"✅ {path} 저장 완료")
 
-          print(f"✅ data/budget.json 저장 완료")
           print(f"   항목수: {len(items)}개")
           print(f"   총집행률: {overall_rate}%")
           print(f"   업데이트: {output['updated_at']}")
@@ -193,7 +195,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/budget.json
+          git add data.json data/budget.json
           if git diff --staged --quiet; then
             echo "ℹ️ 변경 없음 - 커밋 건너뜀"
           else
