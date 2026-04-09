@@ -168,13 +168,17 @@ jobs:
               balance = get_number(page, "잔액")
               exec_rate = get_number(page, "집행률")
 
-              total_exec = exec_2024 + exec_2025
-              if total_exec == 0 and use_total > 0:
+              # ★ 집행액 계산: 사용금액(합계) 우선, 없으면 2024+2025 합산
+              if use_total > 0:
                   total_exec = use_total
+              else:
+                  total_exec = exec_2024 + exec_2025
 
+              # 집행률: xlsx 원본값 우선, 없으면 계산
               if exec_rate == 0 and total_budget > 0 and total_exec > 0:
                   exec_rate = round(total_exec / total_budget, 4)
 
+              # 잔액: xlsx 원본값 우선, 없으면 계산
               if balance == 0 and total_budget > 0:
                   balance = total_budget - total_exec
 
